@@ -1,0 +1,15 @@
+# mysql
+spring:
+  datasource:
+    #mysql配置
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/webapp
+    username: root
+    password: admin123
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.BITSheJianDianPing.bean
+
+server:
+  port: 8080

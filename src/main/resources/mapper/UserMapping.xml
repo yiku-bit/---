@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.BITSheJianDianPing.dao.UserDao">
+    <select id="getUserByMessage" resultType="com.example.BITSheJianDianPing.bean.User">
+        SELECT * FROM User WHERE
+            stuID =#{stuID} AND password =#{password} AND status = 0
+    </select>
+
+    <update id="updatePersonalPassword">
+        UPDATE User SET password = #{password} WHERE id = #{id}
+    </update>
+
+    <update id="updatePersonalData">
+        UPDATE User SET phoNum = #{phoNum}, userName = #{userName}, dislike = #{dislike}, taste = #{taste}, foodPre = #{foodPre} WHERE id = #{id}
+    </update>
+
+    <insert id="insertUser">
+        INSERT INTO User (stuID, phoNum, userName, password, status, gender)
+            VALUES (#{stuID}, #{phoNum}, #{userName}, #{password}, #{status}, #{gender})
+    </insert>
+</mapper>
