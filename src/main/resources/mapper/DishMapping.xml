@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.BITSheJianDianPing.dao.DishDao">
+    <delete id="DeleteAddress">
+        DELETE FROM Address WHERE canteen=#{canteen} and floor=#{floor} and windowNum=#{window}
+    </delete>
+    <delete id="DeleteDish">
+        DELETE FROM Dish WHERE id=#{id}
+    </delete>
+    <select id="getAdminByName" resultType="com.example.BITSheJianDianPing.bean.Administrator">
+        SELECT * FROM Administrator WHERE
+        adminID =#{adminID}
+    </select>
+    <select id="getDishListByAddress" resultType="com.example.BITSheJianDianPing.bean.DishAttribute">
+        SELECT * FROM DISH WHERE canteen=#{canteen} and floor=#{floor} and windowNum=#{window}
+    </select>
+
+    <update id="updatePersonalPassword">
+        UPDATE Administrator SET password = #{password} WHERE id = #{id}
+    </update>
+
+    <insert id="insertUser">
+        INSERT INTO User (stuID, phoNum, userName, password, status, gender)
+        VALUES (#{stuID}, #{phoNum}, #{userName}, #{password}, #{status}, #{gender})
+    </insert>
+    <insert id="AddDish">
+        INSERT INTO Dish (name, description, discount, price, canteen, floor, windowNum) values
+        (#{name}, #{description}, #{discount}, #{price}, #{canteen}, #{floor}, #{window});
+
+    </insert>
+    <select id="AskLastIdentity" resultType="Integer">
+        SELECT @@IDENTITY;
+    </select>
+
+
+    <insert id="AddAddress">
+        INSERT INTO Address (canteen, floor, windowNum) values (#{canteen}, #{floor}, #{window})
+    </insert>
+</mapper>

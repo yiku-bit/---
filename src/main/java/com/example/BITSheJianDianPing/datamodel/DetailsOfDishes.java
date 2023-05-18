@@ -6,6 +6,16 @@ public class DetailsOfDishes {
     private Double discount;
     private Double price;
 
+    public DetailsOfDishes(Integer id, String name, Double discount, Double price, Integer flavor, String description, String photo) {
+        this.id = id;
+        this.name = name;
+        this.discount = discount;
+        this.price = price;
+        this.flavor = flavor;
+        this.description = description;
+        this.photo = photo;
+    }
+
     private Integer flavor;
     private String description;
     private String photo;

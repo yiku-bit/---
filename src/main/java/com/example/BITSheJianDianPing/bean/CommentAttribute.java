@@ -1,21 +1,15 @@
-package com.example.BITSheJianDianPing.datamodel;
+package com.example.BITSheJianDianPing.bean;
 
-public class Comment {
+public class CommentAttribute {
     private String dishname;
     private Integer id;
     private String name;
     private String comment;
     private String photo;
     private String datetime;
-
-    public Comment(String dishname, Integer id, String name, String comment, String photo, String datetime) {
-        this.dishname = dishname;
-        this.id = id;
-        this.name = name;
-        this.comment = comment;
-        this.photo = photo;
-        this.datetime = datetime;
-    }
+    private int canteen;
+    private int floor;
+    private int window;
 
     public String getDishname() {
         return dishname;
@@ -23,6 +17,14 @@ public class Comment {
 
     public void setDishname(String dishname) {
         this.dishname = dishname;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -57,21 +59,27 @@ public class Comment {
         this.datetime = datetime;
     }
 
-    public Integer getId() {
-        return id;
+    public int getCanteen() {
+        return canteen;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCanteen(int canteen) {
+        this.canteen = canteen;
     }
 
-    public void printf()
-    {
-        System.out.println("dishname:"+dishname);
-        System.out.println("id:"+id);
-        System.out.println("name:"+name);
-        System.out.println("comment:"+comment);
-        System.out.println("photo:"+photo);
-        System.out.println("datetime:"+datetime);
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
+    public int getWindow() {
+        return window;
+    }
+
+    public void setWindow(int window) {
+        this.window = window;
     }
 }

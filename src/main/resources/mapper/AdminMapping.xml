@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.BITSheJianDianPing.dao.AdministratorDao">
+    <select id="getAdminByName" resultType="com.example.BITSheJianDianPing.bean.Administrator">
+        SELECT * FROM Administrator WHERE
+        adminID =#{adminID}
+    </select>
+
+    <update id="updatePersonalPassword">
+        UPDATE Administrator SET password = #{password} WHERE id = #{id}
+    </update>
+
+    <insert id="insertUser">
+        INSERT INTO User (stuID, phoNum, userName, password, status, gender)
+        VALUES (#{stuID}, #{phoNum}, #{userName}, #{password}, #{status}, #{gender})
+    </insert>
+</mapper>

@@ -29,6 +29,15 @@ public class Address {
         this.window = window;
     }
 
+    @Override
+    public String toString() {
+        return "Address{" +
+                "canteen=" + canteen +
+                ", floor=" + floor +
+                ", window=" + window +
+                '}';
+    }
+
     public void printf()
     {
         System.out.println("canteen:"+canteen);
