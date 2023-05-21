@@ -12,8 +12,13 @@
         SELECT * FROM Administrator WHERE
         adminID =#{adminID}
     </select>
+
     <select id="getDishListByAddress" resultType="com.example.BITSheJianDianPing.bean.DishAttribute">
         SELECT * FROM DISH WHERE canteen=#{canteen} and floor=#{floor} and windowNum=#{window}
+    </select>
+
+    <select id="getDishByAddressAndName" resultType="com.example.BITSheJianDianPing.bean.DishAttribute">
+        SELECT * FROM DISH WHERE canteen=#{canteen} and floor=#{floor} and windowNum=#{window} and name=#{name}
     </select>
 
     <update id="updatePersonalPassword">

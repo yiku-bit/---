@@ -1,11 +1,18 @@
 package com.example.BITSheJianDianPing.request;
 
+import com.alibaba.fastjson.JSONObject;
+import com.example.BITSheJianDianPing.bean.CommentAttribute;
+import com.example.BITSheJianDianPing.bean.DishAttribute;
+import com.example.BITSheJianDianPing.dao.CommentManageDao;
+import com.example.BITSheJianDianPing.dao.DishDao;
 import com.example.BITSheJianDianPing.datamodel.RatingOfDishes;
 import com.example.BITSheJianDianPing.datamodel.WriteComment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
+import java.util.List;
 
 class GComment
 {
@@ -195,62 +202,133 @@ class ComID
 @Controller
 public class CommentRequest {
 
+    @Autowired
+    private CommentManageDao commentManageDao;
+
+    @Autowired
+    private DishDao dishDao;
+
     @GetMapping("/api/home_page/opinion_bar")
     @ResponseBody
-    public GetComment opinionBar(@RequestParam("canteen") Integer canteen,@RequestParam("floor") Integer floor,@RequestParam("window") Integer window)
+    public GetComment opinionBar(@RequestParam("canteen") Integer canteen,@RequestParam("floor") Integer floor,@RequestParam("window") Integer window,@RequestParam("dishname") String dishname)
     {
         System.out.println("canteen:"+canteen+" floor:"+floor+" window:"+window);
+
         GetComment getComment=new GetComment();
         getComment.type="/home_page/opinion_bar";
         getComment.code=1;
         getComment.message="正常";
+
+        List<CommentAttribute> commentAttributeList;
+        commentAttributeList = commentManageDao.getCommentListByAddressAndName(canteen,floor,window,dishname);
+        Double totTaste=0.0,totEnvironment=0.0,totServe=0.0;
+        for (int i=0;i<commentAttributeList.size();i++)
+        {
+            totTaste=totTaste+commentAttributeList.get(i).getTaste();
+            totEnvironment=totEnvironment+commentAttributeList.get(i).getEnvironment();
+            totServe=totServe+commentAttributeList.get(i).getServe();
+        }
         getComment.data=new GetComment.Data();
         getComment.data.rating=new RatingOfDishes();
-        getComment.data.rating.setTaste(3.5);
-        getComment.data.rating.setEnvironment(2.6);
-        getComment.data.rating.setServe(3.4);
+        getComment.data.rating.setTaste(totTaste/commentAttributeList.size());
+        getComment.data.rating.setEnvironment(totEnvironment/commentAttributeList.size());
+        getComment.data.rating.setServe(totServe/commentAttributeList.size());
         getComment.data.comments=new LinkedList<GComment>();
-        GComment e= new GComment();
-        e.setCommentid(12);
-        e.setId(5);
-        e.setName("小王");
-        e.setDishname("鱼");
-        e.setComment("鱼刺太多");
-        e.setPhoto("暂无");
-        e.setDatetime("2023/5/15");
-        e.setGoodnumber(10);
-        e.setBadnumber(1);
-        e.setDiscount(0.3);
-        e.setPrice(10.0);
-        e.setDescription("鱼刺多，慎点");
-        getComment.data.comments.addFirst(e);
-        getComment.data.comments.addFirst(e);
+        for (int i=0;i<commentAttributeList.size();i++)
+        {
+            GComment e= new GComment();
+            e.setCommentid(commentAttributeList.get(i).getCommentid());
+            e.setId(commentAttributeList.get(i).getId());
+            e.setName(commentAttributeList.get(i).getName());
+            e.setDishname(commentAttributeList.get(i).getDishname());
+            e.setComment(commentAttributeList.get(i).getComment());
+            e.setPhoto(commentAttributeList.get(i).getPhoto());
+            e.setDatetime(commentAttributeList.get(i).getDatetime());
+            e.setGoodnumber(commentAttributeList.get(i).getGoodnumber());
+            e.setBadnumber(commentAttributeList.get(i).getBadnumber());
+            e.setDiscount(commentAttributeList.get(i).getDiscount());
+            e.setPrice(commentAttributeList.get(i).getPrice());
+            e.setDescription(commentAttributeList.get(i).getDescription());
+            getComment.data.comments.addFirst(e);
+        }
+
         return getComment;
     }
 
     @RequestMapping("/api/home_page/write_comment")
     @ResponseBody
-    public WriteComment writeComment(@RequestBody WriteComment comment)
+    public JSONObject writeComment(@RequestBody WriteComment comment)
     {
-        System.out.println("post的json");
-        comment.printf();
-        return comment;
+        System.out.println();
+        int code = 0;
+        String message = "success";
+        String type = "home_page/write_comment";
+        DishAttribute dishAttribute ;/*= new DishAttribute();*/
+        dishAttribute = dishDao.getDishByAddressAndName(comment.getAddress().getCanteen(),comment.getAddress().getFloor(),comment.getAddress().getWindow(),comment.getComment().getDishname());
+
+        int i= commentManageDao.insertComment(comment.getComment().getDishname(),comment.getComment().getId(),comment.getComment().getName(),comment.getComment().getComment(),comment.getComment().getPhoto(),comment.getComment().getDatetime(),comment.getAddress().getCanteen(),comment.getAddress().getFloor(),comment.getAddress().getWindow(),0,0,dishAttribute.getDiscount(),dishAttribute.getPrice(),dishAttribute.getDescription(),comment.getRating().getTaste(),comment.getRating().getEnvironment(),comment.getRating().getServe());
+        if(i>0){
+
+        }else {
+            code = 2;
+            message = "failed";
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", code);
+        jsonObject.put("message", message);
+        jsonObject.put("type", type);
+        jsonObject.put("data", "NULL");
+        return jsonObject;
     }
 
     @RequestMapping("/api/home_page/opinion_bar/good")
     @ResponseBody
-    public boolean goodComment(@RequestBody ComID commentid)
+    public JSONObject goodComment(@RequestBody ComID commentid)
     {
         System.out.println("评论编号"+commentid.getCommentid());
-        return true;
+        int code = 0;
+        String message = "success";
+        String type = "home_page/opinion_bar/good";
+
+        int i=commentManageDao.UpdateGoodComment(commentid.getCommentid());
+        if(i>0){
+
+        }else {
+            code = 2;
+            message = "failed";
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", code);
+        jsonObject.put("message", message);
+        jsonObject.put("type", type);
+        jsonObject.put("data", "NULL");
+        return jsonObject;
     }
 
     @RequestMapping("/api/home_page/opinion_bar/bad")
     @ResponseBody
-    public boolean badComment(@RequestBody ComID commentid)
+    public JSONObject badComment(@RequestBody ComID commentid)
     {
         System.out.println("评论编号"+commentid.getCommentid());
-        return true;
+        int code = 0;
+        String message = "success";
+        String type = "home_page/opinion_bar/bad";
+
+        int i=commentManageDao.UpdateBadComment(commentid.getCommentid());
+        if(i>0){
+
+        }else {
+            code = 2;
+            message = "failed";
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", code);
+        jsonObject.put("message", message);
+        jsonObject.put("type", type);
+        jsonObject.put("data", "NULL");
+        return jsonObject;
     }
 
 }

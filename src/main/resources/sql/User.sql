@@ -78,8 +78,9 @@ CREATE TABLE `Dish`(
 
 Drop table if exists `UserComment`;
 CREATE TABLE UserComment(
-    `id` int not null AUTO_INCREMENT COMMENT '自动增长，主键',
+    `commentid` int not null AUTO_INCREMENT COMMENT '自动增长，主键',
     `name` varchar(255) DEFAULT null COMMENT '用户姓名',
+    `id` int default 0 COMMENT '用户ID',
     `dishname` varchar(255) default null COMMENT '菜名',
     `content` varchar(255) default null COMMENT '评价内容',
     `photo` varchar(255) default null COMMENT '图片url',
@@ -87,7 +88,16 @@ CREATE TABLE UserComment(
     `canteen` int default 0 COMMENT '食堂编号',
     `floor` int default 0 COMMENT '楼层',
     `windowNum` int default 0 COMMENT '窗口号',
-    primary key (`id`),
+    `goodnumber` int default 0 COMMENT '赞数量',
+    `badnumber` int default 0 COMMENT '踩数量',
+    `discount` double DEFAULT 1.0 COMMENT '折扣',
+    `price` double default 0.0 COMMENT '价格',
+    `description` varchar(255) default null COMMENT '菜品描述',
+    `taste` double default 0.0 COMMENT '口味',
+    `environment` double default 0.0 COMMENT '环境',
+    `serve` double default 0.0 COMMENT '服务',
+
+    primary key (`commentid`),
     foreign key (`canteen`,`floor`,`windowNum`) references Address(`canteen`,`floor`,`windowNum`) on delete cascade on update cascade
 )ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -102,13 +112,12 @@ COMMIT;
 
 
 BEGIN;
-INSERT INTO `Address` values (1,)
+INSERT INTO `Address` values (1,);
 COMMIT;
 
 BEGIN;
-insert into `dish` (`name`,`canteen`,`floor`,`window`) values ('奥利给',1,2,3);
-insert into `dish` (`name`,`canteen`,`floor`,`window`) values ('奥利奥',1,2,3);
-
+insert into `Dish` (`name`,`canteen`,`floor`,`windowNum`) values ('奥利给',1,2,3);
+insert into `Dish` (`name`,`canteen`,`floor`,`windowNum`) values ('奥利奥',1,2,3);
 COMMIT;
 
 

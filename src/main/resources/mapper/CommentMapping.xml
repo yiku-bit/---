@@ -2,12 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.BITSheJianDianPing.dao.CommentManageDao">
+
     <delete id="DeleteComment">
-        DELETE from UserComment WHERE id=#{id}
+        DELETE from UserComment WHERE commentid=#{id}
     </delete>
+
     <select id="getCommentListByAddress" resultType="com.example.BITSheJianDianPing.bean.CommentAttribute">
         SELECT * from UserComment WHERE canteen=#{canteen} and floor=#{floor} and windowNum=#{window}
     </select>
+
+    <select id="getCommentListByAddressAndName" resultType="com.example.BITSheJianDianPing.bean.CommentAttribute">
+        SELECT * from UserComment WHERE canteen=#{canteen} and floor=#{floor} and windowNum=#{window} and dishname=#{dishname}
+    </select>
+
+    <insert id="insertComment">
+        INSERT INTO UserComment (commentid,dishname,id,name,content,photo,datetime,canteen,floor,windowNum,goodnumber,badnumber,discount,price,description,taste, environment,serve)
+        VALUES (null, #{dishname}, #{id}, #{name},#{comment}, #{photo}, #{datetime},#{canteen},#{floor},#{window},#{goodnumber},#{badnumber},#{discount},#{price},#{description},#{taste},#{environment},#{serve})
+    </insert>
+
+    <update id="UpdateGoodComment">
+        UPDATE UserComment SET goodnumber=goodnumber+1 WHERE commentid=#{commentid}
+    </update>
+
+    <update id="UpdateBadComment">
+        UPDATE UserComment SET badnumber=badnumber+1 WHERE commentid=#{commentid}
+    </update>
+
     <update id="banUser">
         UPDATE User SET status = 1 WHERE id = #{id}
     </update>

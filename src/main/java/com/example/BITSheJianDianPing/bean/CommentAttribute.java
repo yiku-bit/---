@@ -1,6 +1,8 @@
 package com.example.BITSheJianDianPing.bean;
 
 public class CommentAttribute {
+
+    private Integer commentid;
     private String dishname;
     private Integer id;
     private String name;
@@ -10,6 +12,26 @@ public class CommentAttribute {
     private int canteen;
     private int floor;
     private int window;
+
+    private Integer goodnumber;
+
+    private Integer badnumber;
+
+    private Double discount;
+    private Double price;
+    private String description;
+
+    private Double taste;
+    private Double environment;
+    private Double serve;
+
+    public Integer getCommentid() {
+        return commentid;
+    }
+
+    public void setCommentid(Integer commentid) {
+        this.commentid = commentid;
+    }
 
     public String getDishname() {
         return dishname;
@@ -81,5 +103,69 @@ public class CommentAttribute {
 
     public void setWindow(int window) {
         this.window = window;
+    }
+
+    public Integer getGoodnumber() {
+        return goodnumber;
+    }
+
+    public void setGoodnumber(Integer goodnumber) {
+        this.goodnumber = goodnumber;
+    }
+
+    public Integer getBadnumber() {
+        return badnumber;
+    }
+
+    public void setBadnumber(Integer badnumber) {
+        this.badnumber = badnumber;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Double getTaste() {
+        return taste;
+    }
+
+    public void setTaste(Double taste) {
+        this.taste = taste;
+    }
+
+    public Double getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(Double environment) {
+        this.environment = environment;
+    }
+
+    public Double getServe() {
+        return serve;
+    }
+
+    public void setServe(Double serve) {
+        this.serve = serve;
     }
 }
