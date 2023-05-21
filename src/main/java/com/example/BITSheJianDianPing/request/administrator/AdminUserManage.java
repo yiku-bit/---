@@ -31,6 +31,7 @@ public class AdminUserManage {
         response.setCode(200);
         for(CommentAttribute c:commentAttributes){
             comments.add(new Comment(
+                    c.getDishid(),
                     c.getDishname(),
                     c.getId(),
                     c.getName(),

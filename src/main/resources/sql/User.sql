@@ -71,6 +71,7 @@ CREATE TABLE `Dish`(
     `canteen` int default 0 COMMENT '食堂编号',
     `floor` int default 0 COMMENT '楼层',
     `windowNum` int default 0 COMMENT '窗口号',
+    `news` int default 0 COMMENT '是否为新品',
 
     primary key (`id`),
     foreign key (`canteen`,`floor`,`windowNum`) references Address(`canteen`,`floor`,`windowNum`) on delete cascade on update cascade
@@ -82,6 +83,7 @@ CREATE TABLE UserComment(
     `name` varchar(255) DEFAULT null COMMENT '用户姓名',
     `id` int default 0 COMMENT '用户ID',
     `dishname` varchar(255) default null COMMENT '菜名',
+    `dishid` int default 0 COMMENT '菜品ID',
     `content` varchar(255) default null COMMENT '评价内容',
     `photo` varchar(255) default null COMMENT '图片url',
     `datetime` varchar(255) default null COMMENT '时间',
@@ -112,12 +114,14 @@ COMMIT;
 
 
 BEGIN;
-INSERT INTO `Address` values (1,);
+INSERT INTO `Address` values (1,2,3);
 COMMIT;
 
 BEGIN;
 insert into `Dish` (`name`,`canteen`,`floor`,`windowNum`) values ('奥利给',1,2,3);
 insert into `Dish` (`name`,`canteen`,`floor`,`windowNum`) values ('奥利奥',1,2,3);
+insert into `Dish` (`name`,`canteen`,`floor`,`windowNum`,`discount`) values ('红烧肉',1,2,3,0.8);
+insert into `Dish` (`name`,`canteen`,`floor`,`windowNum`,`news`) values ('鸡腿',1,2,3,1);
 COMMIT;
 
 

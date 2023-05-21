@@ -35,6 +35,7 @@ public class DishAttribute {
                         ", photo='" + photo + '\'' +
                         ", price=" + price +
                         ", window=" + window +
+                        ", news=" + news +
                         '}';
         }
 
@@ -58,6 +59,27 @@ public class DishAttribute {
          * 窗口号，窗口号
          */
         private int window;
+
+        /**
+         * 新品，是否为新品 (1:是新品，0：不是)
+         */
+        private Integer news;
+
+        public int getId() {
+                return id;
+        }
+
+        public void setId(int id) {
+                this.id = id;
+        }
+
+        public Integer getNews() {
+                return news;
+        }
+
+        public void setNews(Integer news) {
+                this.news = news;
+        }
 
         public int getCanteen() { return canteen; }
         public void setCanteen(int value) { this.canteen = value; }

@@ -3,6 +3,8 @@ package com.example.BITSheJianDianPing.bean;
 public class CommentAttribute {
 
     private Integer commentid;
+
+    private Integer dishid;
     private String dishname;
     private Integer id;
     private String name;
@@ -24,6 +26,14 @@ public class CommentAttribute {
     private Double taste;
     private Double environment;
     private Double serve;
+
+    public Integer getDishid() {
+        return dishid;
+    }
+
+    public void setDishid(Integer dishid) {
+        this.dishid = dishid;
+    }
 
     public Integer getCommentid() {
         return commentid;

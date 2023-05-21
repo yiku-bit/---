@@ -1,6 +1,8 @@
 package com.example.BITSheJianDianPing.datamodel;
 
 public class Comment {
+
+    private Integer dishid;
     private String dishname;
     private Integer id;
     private String name;
@@ -8,7 +10,16 @@ public class Comment {
     private String photo;
     private String datetime;
 
-    public Comment(String dishname, Integer id, String name, String comment, String photo, String datetime) {
+    public Integer getDishid() {
+        return dishid;
+    }
+
+    public void setDishid(Integer dishid) {
+        this.dishid = dishid;
+    }
+
+    public Comment(Integer dishid , String dishname, Integer id, String name, String comment, String photo, String datetime) {
+        this.dishid=dishid;
         this.dishname = dishname;
         this.id = id;
         this.name = name;

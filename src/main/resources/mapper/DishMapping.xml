@@ -21,6 +21,14 @@
         SELECT * FROM DISH WHERE canteen=#{canteen} and floor=#{floor} and windowNum=#{window} and name=#{name}
     </select>
 
+    <select id="getNewDishList" resultType="com.example.BITSheJianDianPing.bean.DishAttribute">
+        SELECT * FROM DISH WHERE news=1
+    </select>
+
+    <select id="getSellDishList" resultType="com.example.BITSheJianDianPing.bean.DishAttribute">
+        SELECT * FROM DISH WHERE discount!=1.0
+    </select>
+
     <update id="updatePersonalPassword">
         UPDATE Administrator SET password = #{password} WHERE id = #{id}
     </update>
@@ -30,8 +38,8 @@
         VALUES (#{stuID}, #{phoNum}, #{userName}, #{password}, #{status}, #{gender})
     </insert>
     <insert id="AddDish">
-        INSERT INTO Dish (name, description, discount, price, canteen, floor, windowNum) values
-        (#{name}, #{description}, #{discount}, #{price}, #{canteen}, #{floor}, #{window});
+        INSERT INTO Dish (name, description, discount, price, canteen, floor, windowNum, news) values
+        (#{name}, #{description}, #{discount}, #{price}, #{canteen}, #{floor}, #{window}, #{news});
 
     </insert>
     <select id="AskLastIdentity" resultType="Integer">

@@ -47,7 +47,7 @@ public class AdminDishesRequest {
         try{
             System.out.println("Adding: "+attribute);
             int retval = dishDao.AddDish(attribute.getName(), attribute.getDescription(), attribute.getDiscount(),
-                    attribute.getPrice(), attribute.getCanteen(), attribute.getFloor(), attribute.getWindow());
+                    attribute.getPrice(), attribute.getCanteen(), attribute.getFloor(), attribute.getWindow(),attribute.getNews());
 //            System.out.println("insert dishes retval=:"+retval);
             Integer lastId = dishDao.AskLastIdentity();
             hashMap.put("id", lastId);

@@ -17,6 +17,7 @@ import java.util.List;
 class GComment
 {
     private Integer commentid;
+    private Integer dishid;
     private String dishname;
     private Integer id;
     private String name;
@@ -28,6 +29,14 @@ class GComment
     private Double discount;
     private Double price;
     private String description;
+
+    public Integer getDishid() {
+        return dishid;
+    }
+
+    public void setDishid(Integer dishid) {
+        this.dishid = dishid;
+    }
 
     public Integer getCommentid() {
         return commentid;
@@ -210,7 +219,7 @@ public class CommentRequest {
 
     @GetMapping("/api/home_page/opinion_bar")
     @ResponseBody
-    public GetComment opinionBar(@RequestParam("canteen") Integer canteen,@RequestParam("floor") Integer floor,@RequestParam("window") Integer window,@RequestParam("dishname") String dishname)
+    public GetComment opinionBar(@RequestParam("canteen") Integer canteen,@RequestParam("floor") Integer floor,@RequestParam("window") Integer window,@RequestParam("dishid") String dishid,@RequestParam("dishname") String dishname)
     {
         System.out.println("canteen:"+canteen+" floor:"+floor+" window:"+window);
 
@@ -238,6 +247,7 @@ public class CommentRequest {
         {
             GComment e= new GComment();
             e.setCommentid(commentAttributeList.get(i).getCommentid());
+            e.setDishid(commentAttributeList.get(i).getDishid());
             e.setId(commentAttributeList.get(i).getId());
             e.setName(commentAttributeList.get(i).getName());
             e.setDishname(commentAttributeList.get(i).getDishname());
@@ -266,7 +276,7 @@ public class CommentRequest {
         DishAttribute dishAttribute ;/*= new DishAttribute();*/
         dishAttribute = dishDao.getDishByAddressAndName(comment.getAddress().getCanteen(),comment.getAddress().getFloor(),comment.getAddress().getWindow(),comment.getComment().getDishname());
 
-        int i= commentManageDao.insertComment(comment.getComment().getDishname(),comment.getComment().getId(),comment.getComment().getName(),comment.getComment().getComment(),comment.getComment().getPhoto(),comment.getComment().getDatetime(),comment.getAddress().getCanteen(),comment.getAddress().getFloor(),comment.getAddress().getWindow(),0,0,dishAttribute.getDiscount(),dishAttribute.getPrice(),dishAttribute.getDescription(),comment.getRating().getTaste(),comment.getRating().getEnvironment(),comment.getRating().getServe());
+        int i= commentManageDao.insertComment(comment.getComment().getDishid(),comment.getComment().getDishname(),comment.getComment().getId(),comment.getComment().getName(),comment.getComment().getComment(),comment.getComment().getPhoto(),comment.getComment().getDatetime(),comment.getAddress().getCanteen(),comment.getAddress().getFloor(),comment.getAddress().getWindow(),0,0,dishAttribute.getDiscount(),dishAttribute.getPrice(),dishAttribute.getDescription(),comment.getRating().getTaste(),comment.getRating().getEnvironment(),comment.getRating().getServe());
         if(i>0){
 
         }else {

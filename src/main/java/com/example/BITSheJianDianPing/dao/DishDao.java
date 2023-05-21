@@ -10,8 +10,13 @@ import java.util.List;
 public interface DishDao {
     List<DishAttribute> getDishListByAddress(Integer canteen, Integer floor, Integer window);
 
+    List<DishAttribute> getNewDishList();
+
+    List<DishAttribute> getSellDishList();
+
+
     DishAttribute getDishByAddressAndName(Integer canteen, Integer floor, Integer window,String name);
-    int AddDish(String name, String description, Double discount, Double price, Integer canteen, Integer floor, Integer window);
+    int AddDish(String name, String description, Double discount, Double price, Integer canteen, Integer floor, Integer window, Integer news);
     int AddAddress(Integer canteen, Integer floor, Integer window);
     int DeleteAddress(Integer canteen, Integer floor, Integer window);
     int DeleteDish(Integer id);

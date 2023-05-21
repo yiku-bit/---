@@ -1,12 +1,17 @@
 package com.example.BITSheJianDianPing.request;
 
 
+
+import com.example.BITSheJianDianPing.bean.DishAttribute;
+import com.example.BITSheJianDianPing.dao.DishDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.LinkedList;
+import java.util.List;
 
 
 class AddressAndDetails
@@ -262,7 +267,8 @@ class NewandsellReturn
 @Controller
 public class DishesRequest {
 
-
+    @Autowired
+    private DishDao dishDao;
     @GetMapping("/api/home_page/recommend")
     @ResponseBody
     public RecommendReturn Recommend(@RequestParam("id") Integer id, @RequestParam("date") String date, @RequestParam("number") Integer number)
@@ -304,7 +310,6 @@ public class DishesRequest {
         popularReturn.data=new Data();
         popularReturn.data.dishes=new LinkedList<AddressAndDetails>();
         AddressAndDetails e=new AddressAndDetails();
-
         e.setCanteen(1);
         e.setFloor(2);
         e.setWindow(3);
@@ -317,7 +322,6 @@ public class DishesRequest {
         e.setDescription("不好吃");
         e.setPhoto("暂无");
         popularReturn.data.dishes.addFirst(e);
-
 
         return popularReturn;
     }
@@ -333,21 +337,43 @@ public class DishesRequest {
         newandsellReturn.data=new NewandsellReturn.Data();
         newandsellReturn.data.news=new LinkedList<AddressAndDetails>();
         newandsellReturn.data.sell=new LinkedList<AddressAndDetails>();
-        AddressAndDetails e=new AddressAndDetails();
 
-        e.setCanteen(1);
-        e.setFloor(2);
-        e.setWindow(3);
+        List<DishAttribute> dishAttributeNewList;
+        dishAttributeNewList=dishDao.getNewDishList();
 
-        e.setId(1);
-        e.setName("红烧肉");
-        e.setDiscount(0.8);
-        e.setPrice(5.9);
-        e.setFlavor(3);
-        e.setDescription("不好吃");
-        e.setPhoto("暂无");
-        newandsellReturn.data.news.addFirst(e);
-        newandsellReturn.data.sell.addFirst(e);
+        for (int i=0;i<dishAttributeNewList.size();i++)
+        {
+            AddressAndDetails e = new AddressAndDetails();
+            e.setCanteen(dishAttributeNewList.get(i).getCanteen());
+            e.setFloor(dishAttributeNewList.get(i).getFloor());
+            e.setWindow(dishAttributeNewList.get(i).getWindow());
+            e.setId(dishAttributeNewList.get(i).getId());
+            e.setName(dishAttributeNewList.get(i).getName());
+            e.setDiscount(dishAttributeNewList.get(i).getDiscount());
+            e.setPrice(dishAttributeNewList.get(i).getPrice());
+            e.setFlavor(dishAttributeNewList.get(i).getFlavor());
+            e.setDescription(dishAttributeNewList.get(i).getDescription());
+            e.setPhoto(dishAttributeNewList.get(i).getPhoto());
+            newandsellReturn.data.news.addFirst(e);
+        }
+
+        List<DishAttribute> dishAttributeSellList;
+        dishAttributeSellList=dishDao.getSellDishList();
+        for (int i=0;i<dishAttributeSellList.size();i++)
+        {
+            AddressAndDetails e = new AddressAndDetails();
+            e.setCanteen(dishAttributeSellList.get(i).getCanteen());
+            e.setFloor(dishAttributeSellList.get(i).getFloor());
+            e.setWindow(dishAttributeSellList.get(i).getWindow());
+            e.setId(dishAttributeSellList.get(i).getId());
+            e.setName(dishAttributeSellList.get(i).getName());
+            e.setDiscount(dishAttributeSellList.get(i).getDiscount());
+            e.setPrice(dishAttributeSellList.get(i).getPrice());
+            e.setFlavor(dishAttributeSellList.get(i).getFlavor());
+            e.setDescription(dishAttributeSellList.get(i).getDescription());
+            e.setPhoto(dishAttributeSellList.get(i).getPhoto());
+            newandsellReturn.data.sell.addFirst(e);
+        }
 
         return newandsellReturn;
     }

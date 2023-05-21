@@ -16,8 +16,8 @@
     </select>
 
     <insert id="insertComment">
-        INSERT INTO UserComment (commentid,dishname,id,name,content,photo,datetime,canteen,floor,windowNum,goodnumber,badnumber,discount,price,description,taste, environment,serve)
-        VALUES (null, #{dishname}, #{id}, #{name},#{comment}, #{photo}, #{datetime},#{canteen},#{floor},#{window},#{goodnumber},#{badnumber},#{discount},#{price},#{description},#{taste},#{environment},#{serve})
+        INSERT INTO UserComment (commentid,dishid,dishname,id,name,content,photo,datetime,canteen,floor,windowNum,goodnumber,badnumber,discount,price,description,taste, environment,serve)
+        VALUES (null,#{dishid}, #{dishname}, #{id}, #{name},#{comment}, #{photo}, #{datetime},#{canteen},#{floor},#{window},#{goodnumber},#{badnumber},#{discount},#{price},#{description},#{taste},#{environment},#{serve})
     </insert>
 
     <update id="UpdateGoodComment">
