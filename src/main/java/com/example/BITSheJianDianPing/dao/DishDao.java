@@ -18,6 +18,7 @@ public interface DishDao {
 
     List<RecommendDishAttribute> getRecommendDishList(Integer stuID, String date);
 
+    DishAttribute getDishById(Integer id);
     DishAttribute getDishByAddressAndName(Integer canteen, Integer floor, Integer window,String name);
     int AddDish(String name, String description, Double discount, Double price, Integer canteen, Integer floor, Integer window, Integer news);
     int AddAddress(Integer canteen, Integer floor, Integer window);

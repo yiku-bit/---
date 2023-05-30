@@ -4,6 +4,7 @@ package com.example.BITSheJianDianPing.request;
 
 import com.example.BITSheJianDianPing.bean.DishAttribute;
 import com.example.BITSheJianDianPing.bean.RecommendDishAttribute;
+import com.example.BITSheJianDianPing.dao.CommentManageDao;
 import com.example.BITSheJianDianPing.dao.DishDao;
 import com.google.protobuf.Enum;
 
@@ -278,6 +279,9 @@ public class DishesRequest {
 
     @Autowired
     private DishDao dishDao;
+
+    @Autowired
+    private CommentManageDao commentManageDao;
     @GetMapping("/api/home_page/recommend")
     @ResponseBody
     public RecommendReturn Recommend(@RequestParam("id") Integer id, @RequestParam("date") String date, @RequestParam("number") Integer number)
@@ -360,19 +364,57 @@ public class DishesRequest {
         popularReturn.message="正常";
         popularReturn.data=new Data();
         popularReturn.data.dishes=new LinkedList<AddressAndDetails>();
-        AddressAndDetails e=new AddressAndDetails();
-        e.setCanteen(1);
-        e.setFloor(2);
-        e.setWindow(3);
+        List<Integer> q=commentManageDao.getPopularDishid();
 
-        e.setId(1);
-        e.setName("红烧肉");
-        e.setDiscount(0.8);
-        e.setPrice(5.9);
-        e.setFlavor(3);
-        e.setDescription("不好吃");
-        e.setPhoto("暂无");
-        popularReturn.data.dishes.addFirst(e);
+        if (last_id==0) {
+            for (int i = 0; i < q.size(); i++) {
+                if (i == number) break;
+                AddressAndDetails e = new AddressAndDetails();
+                DishAttribute dishAttribute=dishDao.getDishById(q.get(i));
+                System.out.println(q.get(i));
+                e.setCanteen(dishAttribute.getCanteen());
+                e.setFloor(dishAttribute.getFloor());
+                e.setWindow(dishAttribute.getWindow());
+
+                e.setId(dishAttribute.getId());
+                e.setName(dishAttribute.getName());
+                e.setDiscount(dishAttribute.getDiscount());
+                e.setPrice(dishAttribute.getPrice());
+                e.setFlavor(dishAttribute.getFlavor());
+                e.setDescription(dishAttribute.getDescription());
+                e.setPhoto(dishAttribute.getPhoto());
+                popularReturn.data.dishes.addLast(e);
+
+            }
+        }
+        Integer cnt=0;
+        if (last_id!=0) {
+            for (int i=0;i<q.size();i++) {
+                if (q.get(i)==last_id)
+                {
+                    for (int j=i+1;j<q.size();j++)
+                    {
+                        cnt++;
+                        AddressAndDetails e = new AddressAndDetails();
+                        DishAttribute dishAttribute=dishDao.getDishById(q.get(i));
+                        e.setCanteen(dishAttribute.getCanteen());
+                        e.setFloor(dishAttribute.getFloor());
+                        e.setWindow(dishAttribute.getWindow());
+
+                        e.setId(dishAttribute.getId());
+                        e.setName(dishAttribute.getName());
+                        e.setDiscount(dishAttribute.getDiscount());
+                        e.setPrice(dishAttribute.getPrice());
+                        e.setFlavor(dishAttribute.getFlavor());
+                        e.setDescription(dishAttribute.getDescription());
+                        e.setPhoto(dishAttribute.getPhoto());
+                        popularReturn.data.dishes.addLast(e);
+                        if (cnt==number) break;
+                    }
+                    break;
+                }
+            }
+        }
 
         return popularReturn;
     }

@@ -21,6 +21,10 @@
         SELECT * FROM Dish WHERE canteen=#{canteen} and floor=#{floor} and windowNum=#{window} and name=#{name}
     </select>
 
+    <select id="getDishById" resultType="com.example.BITSheJianDianPing.bean.DishAttribute">
+        SELECT * FROM DISH WHERE id=#{id}
+    </select>
+
     <select id="getNewDishList" resultType="com.example.BITSheJianDianPing.bean.DishAttribute">
         SELECT * FROM Dish WHERE news=1
     </select>
