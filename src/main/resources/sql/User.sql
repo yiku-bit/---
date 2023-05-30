@@ -33,7 +33,7 @@ CREATE TABLE `User` (
   `taste` varchar(255) DEFAULT NULL COMMENT '口味偏好',
   `foodPre` varchar(255) DEFAULT NULL COMMENT '饮食偏好',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Table structure for Administrator
@@ -46,7 +46,7 @@ CREATE TABLE `Administrator` (
   `userName` varchar(255) DEFAULT NULL COMMENT '用户名',
   `password` varchar(255) DEFAULT NULL COMMENT '密码',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 DROP TABLE IF EXISTS `Address`;
 CREATE TABLE `Address`(
@@ -57,7 +57,7 @@ CREATE TABLE `Address`(
     key `floor_index` (`floor`),
     key `windowNum_index` (`windowNum`),
     primary key (`canteen`, `floor`, `windowNum`)
-)ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+)ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 DROP TABLE IF EXISTS `Dish`;
 CREATE TABLE `Dish`(
@@ -75,7 +75,7 @@ CREATE TABLE `Dish`(
 
     primary key (`id`),
     foreign key (`canteen`,`floor`,`windowNum`) references Address(`canteen`,`floor`,`windowNum`) on delete cascade on update cascade
-)ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+)ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 Drop table if exists `UserComment`;
 CREATE TABLE UserComment(
@@ -101,7 +101,7 @@ CREATE TABLE UserComment(
 
     primary key (`commentid`),
     foreign key (`canteen`,`floor`,`windowNum`) references Address(`canteen`,`floor`,`windowNum`) on delete cascade on update cascade
-)ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+)ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of User
@@ -126,3 +126,21 @@ COMMIT;
 
 
 SET FOREIGN_KEY_CHECKS = 1;
+-- ----------------------------
+-- Records of Recommendation
+-- ----------------------------
+DROP TABLE IF EXISTS `Recommendation`;
+CREATE TABLE Recommendation (
+  stuID INT NOT NULL,
+  dishID INT NOT NULL,
+  recScore DOUBLE NOT NULL,
+  tmp VARCHAR(255) NuLL,
+  PRIMARY KEY (stuID, dishID)
+);
+-- 把recommendation.csv移至mysql-files文件夹下
+LOAD DATA INFILE '/var/lib/mysql-files/recommendation.csv'
+INTO TABLE Recommendation
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+alter table Recommendation drop column tmp;

@@ -33,7 +33,7 @@ CREATE TABLE `User` (
   `taste` varchar(255) DEFAULT NULL COMMENT '口味偏好',
   `foodPre` varchar(255) DEFAULT NULL COMMENT '饮食偏好',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of User

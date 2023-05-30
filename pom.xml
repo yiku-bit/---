@@ -13,6 +13,22 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>BITSheJianDianPing</name>
 	<description>BITSheJianDianPing</description>
+	<repositories>
+    <repository>
+        <id>central</id>
+        <name>aliyun maven</name>
+        <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        <layout>default</layout>
+        <!-- 是否开启发布版构件下载 -->
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <!-- 是否开启快照版构件下载 -->
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+</repositories>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
@@ -66,7 +82,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+		<!-- <dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.6.1</version>
+		</dependency> -->
+	
+ </dependencies>
 
 	<build>
 		<plugins>

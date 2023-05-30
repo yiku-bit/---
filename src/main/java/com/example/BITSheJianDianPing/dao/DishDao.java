@@ -2,6 +2,8 @@ package com.example.BITSheJianDianPing.dao;
 
 import com.example.BITSheJianDianPing.bean.CommentAttribute;
 import com.example.BITSheJianDianPing.bean.DishAttribute;
+import com.example.BITSheJianDianPing.bean.RecommendDishAttribute;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +16,7 @@ public interface DishDao {
 
     List<DishAttribute> getSellDishList();
 
+    List<RecommendDishAttribute> getRecommendDishList(Integer stuID, String date);
 
     DishAttribute getDishByAddressAndName(Integer canteen, Integer floor, Integer window,String name);
     int AddDish(String name, String description, Double discount, Double price, Integer canteen, Integer floor, Integer window, Integer news);
@@ -21,6 +24,7 @@ public interface DishDao {
     int DeleteAddress(Integer canteen, Integer floor, Integer window);
     int DeleteDish(Integer id);
     Integer AskLastIdentity();
+
 
 
 }

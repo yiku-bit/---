@@ -3,15 +3,24 @@ package com.example.BITSheJianDianPing.request;
 
 
 import com.example.BITSheJianDianPing.bean.DishAttribute;
+import com.example.BITSheJianDianPing.bean.RecommendDishAttribute;
 import com.example.BITSheJianDianPing.dao.DishDao;
+import com.google.protobuf.Enum;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
+// import org.apache.commons.math3.distribution.EnumeratedDistribution;
+// import org.apache.commons.math3.util.Pair;
 
 
 class AddressAndDetails
@@ -273,27 +282,69 @@ public class DishesRequest {
     @ResponseBody
     public RecommendReturn Recommend(@RequestParam("id") Integer id, @RequestParam("date") String date, @RequestParam("number") Integer number)
     {
-        System.out.println("id:"+id+" date:"+date+" number:"+number);
+        System.out.println("id:" + id + " date:" + date + " number:" + number);
         RecommendReturn recommendReturn= new RecommendReturn();
         recommendReturn.type="/home_page/recommend";
         recommendReturn.code=1;
         recommendReturn.message="正常";
         recommendReturn.data=new Data();
         recommendReturn.data.dishes= new LinkedList<AddressAndDetails>();
-        AddressAndDetails e=new AddressAndDetails();
+        
+        List<RecommendDishAttribute> recommendDishAttributes = dishDao.getRecommendDishList(id, date);
 
-        e.setCanteen(1);
-        e.setFloor(2);
-        e.setWindow(3);
+        if(recommendDishAttributes.size() < number)
+        {
+            recommendReturn.code=-1; //TODO
+            recommendReturn.message="请求菜品数量过多";
+            number = recommendDishAttributes.size();
+        }
 
-        e.setId(1);
-        e.setName("红烧肉");
-        e.setDiscount(0.8);
-        e.setPrice(5.9);
-        e.setFlavor(3);
-        e.setDescription("不好吃");
-        e.setPhoto("暂无");
-        recommendReturn.data.dishes.addFirst(e);
+        // for(RecommendDishAttribute recommendDishAttribute:recommendDishAttributes) {
+        // //     //获取当前的dishid和recScore
+        //     Integer dishId = recommendDishAttribute.getDishID();
+        //     double recScore = recommendDishAttribute.getRecScore();
+
+        // }
+        // 根据recScore，加权随机选取number个dishId
+        double sum = 0;
+        for(RecommendDishAttribute recommendDishAttribute:recommendDishAttributes) {
+            sum += recommendDishAttribute.getRecScore();
+        }
+        double[] weight = new double[recommendDishAttributes.size()];
+        for(int i = 0; i < recommendDishAttributes.size(); i++) {
+            weight[i] = recommendDishAttributes.get(i).getRecScore() / sum;
+        }
+        Set<Integer> selectedItems = new HashSet<>();
+        Random random = new Random();
+        while(selectedItems.size() < number) {
+            double randomNum = random.nextDouble();
+            double sumWeight = 0;
+            for(int j = 0; j < recommendDishAttributes.size(); j++) {
+                sumWeight += weight[j];
+                if(randomNum <= sumWeight) {
+                    selectedItems.add(recommendDishAttributes.get(j).getDishID());
+                    break;
+                }
+            }
+        }
+
+        System.out.println("随机推荐的" + number + "个dishid是：");
+        for(Integer selectedItem : selectedItems) {
+            System.out.println(selectedItem);
+            // AddressAndDetails e=new AddressAndDetails();
+            // e.setCanteen(dishAttributeNewList.get(i).getCanteen());
+            // e.setFloor(dishAttributeNewList.get(i).getFloor());
+            // e.setWindow(dishAttributeNewList.get(i).getWindow());
+            // e.setId(dishAttributeNewList.get(i).getId());
+            // e.setName(dishAttributeNewList.get(i).getName());
+            // e.setDiscount(dishAttributeNewList.get(i).getDiscount());
+            // e.setPrice(dishAttributeNewList.get(i).getPrice());
+            // e.setFlavor(dishAttributeNewList.get(i).getFlavor());
+            // e.setDescription(dishAttributeNewList.get(i).getDescription());
+            // e.setPhoto(dishAttributeNewList.get(i).getPhoto());
+        }
+
+        
 
         return recommendReturn;
     }

@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Logs ###
+*.log
+
+### MysqlPassword ###
+src/main/resources/application.properties
+src/main/resources/application.yml
