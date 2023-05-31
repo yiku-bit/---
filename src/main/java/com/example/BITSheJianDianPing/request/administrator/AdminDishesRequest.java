@@ -12,6 +12,140 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+
+class DishType {
+
+        private int canteen;
+
+        private String description;
+
+        private double discount;
+
+        private int flavor;
+
+        private int floor;
+
+        @Override
+        public String toString() {
+            return "DishAtt{" +
+                    "canteen=" + canteen +
+                    ", description='" + description + '\'' +
+                    ", discount=" + discount +
+                    ", flavor=" + flavor +
+                    ", floor=" + floor +
+                    ", id=" + id +
+                    ", name='" + name + '\'' +
+                    ", photo='" + photo + '\'' +
+                    ", price=" + price +
+                    ", window=" + window +
+                    ", news=" + news +
+                    '}';
+        }
+
+
+        private int id;
+
+        private String name;
+
+        private String photo;
+
+        private double price;
+
+        private int window;
+
+
+        private Integer news;
+
+
+        public int getCanteen() {
+            return canteen;
+        }
+
+        public void setCanteen(int canteen) {
+            this.canteen = canteen;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public double getDiscount() {
+            return discount;
+        }
+
+        public void setDiscount(double discount) {
+            this.discount = discount;
+        }
+
+        public int getFlavor() {
+            return flavor;
+        }
+
+        public void setFlavor(int flavor) {
+            this.flavor = flavor;
+        }
+
+        public int getFloor() {
+            return floor;
+        }
+
+        public void setFloor(int floor) {
+            this.floor = floor;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getPhoto() {
+            return photo;
+        }
+
+        public void setPhoto(String photo) {
+            this.photo = photo;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setNews(Integer news) {
+            this.news = news;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        public int getWindow() {
+            return window;
+        }
+
+        public void setWindow(int window) {
+            this.window = window;
+        }
+
+        public Integer getNews() {
+            return news;
+        }
+}
+
 @Controller
 public class AdminDishesRequest {
     @Autowired
@@ -19,6 +153,7 @@ public class AdminDishesRequest {
     @GetMapping("/api/admin_page/get_dish_list")
     @ResponseBody
     public StdResponse GetDishList(@RequestBody Address address){
+//        System.out.println();
         List<DishAttribute> dishAttributes = dishDao.getDishListByAddress(address.getCanteen(),address.getFloor(),address.getWindow());
         System.out.println("address:"+address);
         System.out.println("got size:"+dishAttributes.size());
@@ -28,7 +163,7 @@ public class AdminDishesRequest {
         response.setCode(200);
         for(DishAttribute d:dishAttributes){
             detailsOfDishes.add(new DetailsOfDishes(
-                    (int)d.getid(), d.getName(), d.getDiscount(), d.getPrice(),
+                    (int)d.getId(), d.getName(), d.getDiscount(), d.getPrice(),
                     (int)d.getFlavor(), d.getDescription(), d.getPhoto()
             ));
         }
@@ -41,13 +176,16 @@ public class AdminDishesRequest {
     @PostMapping("/api/admin_page/add_dish")
     @ResponseBody
     public StdResponse AddDish(@RequestBody DishAttribute attribute){
+        System.out.println("????");
         StdResponse response = new StdResponse();
         response.setType("AddDish");
         HashMap<String,Object>hashMap = new HashMap<>();
+        System.out.println("Adding: "+attribute);
         try{
-            System.out.println("Adding: "+attribute);
+//            System.out.println(attribute);
             int retval = dishDao.AddDish(attribute.getName(), attribute.getDescription(), attribute.getDiscount(),
-                    attribute.getPrice(), attribute.getCanteen(), attribute.getFloor(), attribute.getWindow(),attribute.getNews());
+                    attribute.getPrice(), attribute.getCanteen(), attribute.getFloor(), attribute.getWindow(),attribute.getNews(),
+                    attribute.getPhoto());
 //            System.out.println("insert dishes retval=:"+retval);
             Integer lastId = dishDao.AskLastIdentity();
             hashMap.put("id", lastId);

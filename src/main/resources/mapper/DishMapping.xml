@@ -22,7 +22,7 @@
     </select>
 
     <select id="getDishById" resultType="com.example.BITSheJianDianPing.bean.DishAttribute">
-        SELECT * FROM DISH WHERE id=#{id}
+        SELECT * FROM Dish WHERE id=#{id}
     </select>
 
     <select id="getNewDishList" resultType="com.example.BITSheJianDianPing.bean.DishAttribute">
@@ -42,8 +42,8 @@
         VALUES (#{stuID}, #{phoNum}, #{userName}, #{password}, #{status}, #{gender})
     </insert>
     <insert id="AddDish">
-        INSERT INTO Dish (name, description, discount, price, canteen, floor, windowNum, news) values
-        (#{name}, #{description}, #{discount}, #{price}, #{canteen}, #{floor}, #{window}, #{news});
+        INSERT INTO Dish (name, description, discount, price, canteen, floor, windowNum, news, photo) values
+        (#{name}, #{description}, #{discount}, #{price}, #{canteen}, #{floor}, #{window}, #{news}, #{photo});
 
     </insert>
     <select id="AskLastIdentity" resultType="Integer">
@@ -57,5 +57,9 @@
 
     <select id="getRecommendDishList" resultType="com.example.BITSheJianDianPing.bean.RecommendDishAttribute">
         SELECT * FROM Recommendation WHERE stuID=#{stuID}
+    </select>
+
+    <select id="getWindowById" resultType="Integer">
+        SELECT windowNum FROM Dish WHERE id=#{id}
     </select>
 </mapper>

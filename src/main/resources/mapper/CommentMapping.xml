@@ -23,6 +23,10 @@
             ORDER BY score desc
     </select>
 
+    <select id="getContent" resultType="String">
+        SELECT content FROM UserComment WHERE commentid=#{commentid}
+    </select>
+
     <insert id="insertComment">
         INSERT INTO UserComment (commentid,dishid,dishname,id,name,content,photo,datetime,canteen,floor,windowNum,goodnumber,badnumber,discount,price,description,taste, environment,serve)
         VALUES (null,#{dishid}, #{dishname}, #{id}, #{name},#{comment}, #{photo}, #{datetime},#{canteen},#{floor},#{window},#{goodnumber},#{badnumber},#{discount},#{price},#{description},#{taste},#{environment},#{serve})
@@ -42,5 +46,9 @@
     <update id="unblockUser">
         UPDATE User SET status = 0 WHERE id = #{id}
     </update>
+
+    <select id="getCommentListByAddressAndId" resultType="com.example.BITSheJianDianPing.bean.CommentAttribute">
+        SELECT * from UserComment WHERE canteen=#{canteen} and floor=#{floor} and windowNum=#{window} and dishid=#{dishid}
+    </select>
 
 </mapper>

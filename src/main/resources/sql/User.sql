@@ -59,6 +59,24 @@ CREATE TABLE `Address`(
     primary key (`canteen`, `floor`, `windowNum`)
 )ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+-- LOAD DATA INFILE '/var/lib/mysql-files/sql_address.csv'
+-- INTO TABLE Address
+-- FIELDS TERMINATED BY ','
+-- LINES TERMINATED BY '\n'
+-- IGNORE 1 ROWS;
+INSERT IGNORE INTO Address (canteen, floor, windowNum)
+SELECT canteen, floor, windowNum
+FROM (
+  SELECT 1 AS canteen UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
+) AS canteens
+CROSS JOIN (
+  SELECT 1 AS floor UNION SELECT 2 UNION SELECT 3
+) AS floors
+CROSS JOIN (
+  SELECT 1 AS windowNum UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+  UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+) AS windowNums;
+
 DROP TABLE IF EXISTS `Dish`;
 CREATE TABLE `Dish`(
     `id` int not null AUTO_INCREMENT COMMENT '自动增长，主键',
@@ -76,6 +94,15 @@ CREATE TABLE `Dish`(
     primary key (`id`),
     foreign key (`canteen`,`floor`,`windowNum`) references Address(`canteen`,`floor`,`windowNum`) on delete cascade on update cascade
 )ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+LOAD DATA INFILE '/var/lib/mysql-files/sql_dish.csv'
+INTO TABLE Dish
+CHARACTER SET "UTF8"
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+select * from Dish limit 10;
 
 Drop table if exists `UserComment`;
 CREATE TABLE UserComment(

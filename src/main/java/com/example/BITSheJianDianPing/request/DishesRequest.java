@@ -335,17 +335,21 @@ public class DishesRequest {
         System.out.println("随机推荐的" + number + "个dishid是：");
         for(Integer selectedItem : selectedItems) {
             System.out.println(selectedItem);
-            // AddressAndDetails e=new AddressAndDetails();
-            // e.setCanteen(dishAttributeNewList.get(i).getCanteen());
-            // e.setFloor(dishAttributeNewList.get(i).getFloor());
-            // e.setWindow(dishAttributeNewList.get(i).getWindow());
-            // e.setId(dishAttributeNewList.get(i).getId());
-            // e.setName(dishAttributeNewList.get(i).getName());
-            // e.setDiscount(dishAttributeNewList.get(i).getDiscount());
-            // e.setPrice(dishAttributeNewList.get(i).getPrice());
-            // e.setFlavor(dishAttributeNewList.get(i).getFlavor());
-            // e.setDescription(dishAttributeNewList.get(i).getDescription());
-            // e.setPhoto(dishAttributeNewList.get(i).getPhoto());
+                AddressAndDetails e = new AddressAndDetails();
+                DishAttribute dishAttribute=dishDao.getDishById(selectedItem);
+                e.setCanteen(dishAttribute.getCanteen());
+                e.setFloor(dishAttribute.getFloor());
+                // e.setWindow(dishAttribute.getWindow());
+
+                e.setId(dishAttribute.getId());
+                e.setWindow(dishDao.getWindowById(e.getId()));
+                e.setName(dishAttribute.getName());
+                e.setDiscount(dishAttribute.getDiscount());
+                e.setPrice(dishAttribute.getPrice());
+                e.setFlavor(dishAttribute.getFlavor());
+                e.setDescription(dishAttribute.getDescription());
+                e.setPhoto(dishAttribute.getPhoto());
+                recommendReturn.data.dishes.add(e);
         }
 
         
@@ -366,9 +370,9 @@ public class DishesRequest {
         popularReturn.data.dishes=new LinkedList<AddressAndDetails>();
         List<Integer> q=commentManageDao.getPopularDishid();
 
-        if (last_id==0) {
-            for (int i = 0; i < q.size(); i++) {
-                if (i == number) break;
+        // if (last_id==0) {
+            for (int i = last_id; i < q.size() && i < last_id + number; i++) {
+                System.out.println("qsize" + q.size());
                 AddressAndDetails e = new AddressAndDetails();
                 DishAttribute dishAttribute=dishDao.getDishById(q.get(i));
                 System.out.println(q.get(i));
@@ -377,6 +381,7 @@ public class DishesRequest {
                 e.setWindow(dishAttribute.getWindow());
 
                 e.setId(dishAttribute.getId());
+                e.setWindow(dishDao.getWindowById(e.getId()));
                 e.setName(dishAttribute.getName());
                 e.setDiscount(dishAttribute.getDiscount());
                 e.setPrice(dishAttribute.getPrice());
@@ -386,35 +391,35 @@ public class DishesRequest {
                 popularReturn.data.dishes.addLast(e);
 
             }
-        }
-        Integer cnt=0;
-        if (last_id!=0) {
-            for (int i=0;i<q.size();i++) {
-                if (q.get(i)==last_id)
-                {
-                    for (int j=i+1;j<q.size();j++)
-                    {
-                        cnt++;
-                        AddressAndDetails e = new AddressAndDetails();
-                        DishAttribute dishAttribute=dishDao.getDishById(q.get(i));
-                        e.setCanteen(dishAttribute.getCanteen());
-                        e.setFloor(dishAttribute.getFloor());
-                        e.setWindow(dishAttribute.getWindow());
+        // }
+        // Integer cnt=0;
+        // if (last_id!=0) {
+        //     for (int i=0;i<q.size();i++) {
+        //         if (q.get(i)==last_id)
+        //         {
+        //             for (int j=i+1;j<q.size();j++)
+        //             {
+        //                 cnt++;
+        //                 AddressAndDetails e = new AddressAndDetails();
+        //                 DishAttribute dishAttribute=dishDao.getDishById(q.get(i));
+        //                 e.setCanteen(dishAttribute.getCanteen());
+        //                 e.setFloor(dishAttribute.getFloor());
+        //                 e.setWindow(dishAttribute.getWindow());
 
-                        e.setId(dishAttribute.getId());
-                        e.setName(dishAttribute.getName());
-                        e.setDiscount(dishAttribute.getDiscount());
-                        e.setPrice(dishAttribute.getPrice());
-                        e.setFlavor(dishAttribute.getFlavor());
-                        e.setDescription(dishAttribute.getDescription());
-                        e.setPhoto(dishAttribute.getPhoto());
-                        popularReturn.data.dishes.addLast(e);
-                        if (cnt==number) break;
-                    }
-                    break;
-                }
-            }
-        }
+        //                 e.setId(dishAttribute.getId());
+        //                 e.setName(dishAttribute.getName());
+        //                 e.setDiscount(dishAttribute.getDiscount());
+        //                 e.setPrice(dishAttribute.getPrice());
+        //                 e.setFlavor(dishAttribute.getFlavor());
+        //                 e.setDescription(dishAttribute.getDescription());
+        //                 e.setPhoto(dishAttribute.getPhoto());
+        //                 popularReturn.data.dishes.addLast(e);
+        //                 if (cnt==number) break;
+        //             }
+        //             break;
+        //         }
+        //     }
+        // }
 
         return popularReturn;
     }
@@ -441,6 +446,7 @@ public class DishesRequest {
             e.setFloor(dishAttributeNewList.get(i).getFloor());
             e.setWindow(dishAttributeNewList.get(i).getWindow());
             e.setId(dishAttributeNewList.get(i).getId());
+            e.setWindow(dishDao.getWindowById(e.getId()));
             e.setName(dishAttributeNewList.get(i).getName());
             e.setDiscount(dishAttributeNewList.get(i).getDiscount());
             e.setPrice(dishAttributeNewList.get(i).getPrice());
@@ -459,6 +465,7 @@ public class DishesRequest {
             e.setFloor(dishAttributeSellList.get(i).getFloor());
             e.setWindow(dishAttributeSellList.get(i).getWindow());
             e.setId(dishAttributeSellList.get(i).getId());
+            e.setWindow(dishDao.getWindowById(e.getId()));
             e.setName(dishAttributeSellList.get(i).getName());
             e.setDiscount(dishAttributeSellList.get(i).getDiscount());
             e.setPrice(dishAttributeSellList.get(i).getPrice());

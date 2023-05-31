@@ -219,7 +219,7 @@ public class CommentRequest {
 
     @GetMapping("/api/home_page/opinion_bar")
     @ResponseBody
-    public GetComment opinionBar(@RequestParam("canteen") Integer canteen,@RequestParam("floor") Integer floor,@RequestParam("window") Integer window,@RequestParam("dishid") String dishid,@RequestParam("dishname") String dishname)
+    public GetComment opinionBar(@RequestParam("canteen") Integer canteen,@RequestParam("floor") Integer floor,@RequestParam("window") Integer window,@RequestParam("dishid") Integer dishid,@RequestParam("dishname") String dishname)
     {
         System.out.println("canteen:"+canteen+" floor:"+floor+" window:"+window);
 
@@ -229,7 +229,8 @@ public class CommentRequest {
         getComment.message="正常";
 
         List<CommentAttribute> commentAttributeList;
-        commentAttributeList = commentManageDao.getCommentListByAddressAndName(canteen,floor,window,dishname);
+        // commentAttributeList = commentManageDao.getCommentListByAddressAndName(canteen,floor,window,dishname);
+        commentAttributeList = commentManageDao.getCommentListByAddressAndId(canteen,floor,window,dishid);
         Double totTaste=0.0,totEnvironment=0.0,totServe=0.0;
         for (int i=0;i<commentAttributeList.size();i++)
         {
@@ -252,6 +253,7 @@ public class CommentRequest {
             e.setName(commentAttributeList.get(i).getName());
             e.setDishname(commentAttributeList.get(i).getDishname());
             e.setComment(commentAttributeList.get(i).getComment());
+            e.setComment(commentManageDao.getContent(e.getCommentid()));
             e.setPhoto(commentAttributeList.get(i).getPhoto());
             e.setDatetime(commentAttributeList.get(i).getDatetime());
             e.setGoodnumber(commentAttributeList.get(i).getGoodnumber());

@@ -18,11 +18,13 @@ public class AdminWindowsRequest {
         StdResponse response = new StdResponse();
         response.setType("AddWindow");
         try{
+            System.out.println("address: "+address.getCanteen()+", "+address.getFloor()+", "+address.getWindow());
             int retval = dishDao.AddAddress(address.getCanteen(), address.getFloor(), address.getWindow());
             System.out.println("Addwindow retval="+retval);
             response.setCode(200);
             response.setMessage("success");
         }catch (Exception e){
+            e.printStackTrace();
             response.setCode(500);
             response.setMessage("failed");
         }

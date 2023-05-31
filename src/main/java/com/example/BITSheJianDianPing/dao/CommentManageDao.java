@@ -11,8 +11,13 @@ public interface CommentManageDao {
     List<CommentAttribute> getCommentListByAddressAndName(Integer canteen, Integer floor, Integer window,String dishname);
 
     List<Integer> getPopularDishid();
+    
+    List<CommentAttribute> getCommentListByAddressAndId(Integer canteen, Integer floor, Integer window,Integer dishid);
+
     int insertComment(Integer dishid, String dishname, Integer id,String name, String comment,String photo,String datetime,int canteen,int floor,int window,Integer goodnumber,Integer badnumber,Double discount,Double price,String description,Double taste,Double environment,Double serve);
     int DeleteComment(Integer id);
+    
+    String getContent(Integer commentid);
 
     int UpdateGoodComment(Integer commentid);
 
