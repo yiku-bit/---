@@ -52,9 +52,15 @@ public class AdminUserManage {
         StdResponse response = new StdResponse();
         int cid = id.getCommentID();
         try{
-            commentManageDao.DeleteComment(cid);
-            response.setCode(200);
-            response.setMessage("success");
+            int u=commentManageDao.DeleteComment(cid);
+            if(u==0){
+                response.setCode(404);
+                response.setMessage("no comment found");
+            }
+            else{
+                response.setCode(200);
+                response.setMessage("success");
+            }
         }catch (Exception e){
             e.printStackTrace();
             response.setCode(500);
