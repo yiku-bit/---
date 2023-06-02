@@ -274,6 +274,83 @@ class NewandsellReturn
     }
 }
 
+class NameAndId
+{
+    private String name;
+    private  Integer id;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+}
+
+
+class DishlistReturn
+{
+    String type;
+    Integer code;
+    String message;
+    static class Data
+    {
+        LinkedList<NameAndId> dishlist;
+
+        public LinkedList<NameAndId> getDishlist() {
+            return dishlist;
+        }
+
+        public void setDishlist(LinkedList<NameAndId> dishlist) {
+            this.dishlist = dishlist;
+        }
+    }
+
+    Data data;
+
+    public Data getData() {
+        return data;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}
+
+
 @Controller
 public class DishesRequest {
 
@@ -476,6 +553,32 @@ public class DishesRequest {
         }
 
         return newandsellReturn;
+    }
+
+     @GetMapping("/api/home_page/dishlist")
+    @ResponseBody
+    public DishlistReturn Dishlist(@RequestParam("canteen") Integer canteen, @RequestParam("floor") Integer floor, @RequestParam("window") Integer window)
+    {
+        //System.out.println("id:"+id+" date:"+date+" number:"+number);
+        DishlistReturn dishlistReturn =new DishlistReturn();
+        dishlistReturn.type="/home_page/dishlist";
+        dishlistReturn.code=1;
+        dishlistReturn.message="正常";
+        dishlistReturn.data=new DishlistReturn.Data();
+        dishlistReturn.data.dishlist=new LinkedList<NameAndId>();
+
+        List<DishAttribute> dishAttributeList;
+        dishAttributeList=dishDao.getDishListByAddress(canteen,floor,window);
+
+        for (int i=0;i<dishAttributeList.size();i++)
+        {
+            NameAndId e =new NameAndId();
+            e.setId(dishAttributeList.get(i).getId());
+            e.setName(dishAttributeList.get(i).getName());
+            dishlistReturn.data.dishlist.addLast(e);
+        }
+
+        return dishlistReturn;
     }
 
 }

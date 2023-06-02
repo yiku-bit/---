@@ -84,6 +84,112 @@ class TrafficRequestData{
     }
 }    
 
+class DownloadTrafficRequestData{
+    String type;
+    Integer code;
+    String message;
+    class DownloadData{
+        private Integer canteen;
+        private Integer floor;
+        private Integer window;
+        class time{
+            private String startTime;
+            private String endTime;
+            public String getStartTime() {
+                return startTime;
+            }
+            public void setStartTime(String startTime) {
+                this.startTime = startTime;
+            }
+            public String getEndTime() {
+                return endTime;
+            }
+            public void setEndTime(String endTime) {
+                this.endTime = endTime;
+            }
+        };
+        private time time = new time();
+        private Integer humanTraffics;
+
+        
+
+        public Integer getCanteen() {
+            return canteen;
+        }
+
+        public void setCanteen(Integer canteen) {
+            this.canteen = canteen;
+        }
+
+        public Integer getFloor() {
+            return floor;
+        }
+
+        public void setFloor(Integer floor) {
+            this.floor = floor;
+        }
+
+        public Integer getWindow() {
+            return window;
+        }
+
+        public void setWindow(Integer window) {
+            this.window = window;
+        }
+
+        public time getTime() {
+            return time;
+        }
+
+        public void setTime(String startTime, String endTime) {
+            this.time.setStartTime(startTime);
+            this.time.setEndTime(endTime);
+        }
+
+        public Integer getHumanTraffic() {
+            return humanTraffics;
+        }
+
+        public void setHumanTraffic(Integer humanTraffics) {
+            this.humanTraffics = humanTraffics;
+        }
+    };
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    DownloadData data = new DownloadData();
+
+    public DownloadData getData() {
+        return data;
+    }
+
+    public void setData(DownloadData data) {
+        this.data = data;
+    }
+}
+
 @Controller
 public class TrafficRequest {
     @GetMapping("/api/home_page/traffic_monitoring")
@@ -104,6 +210,22 @@ public class TrafficRequest {
         trafficRequestData.data.setHumanTraffics(humanTraffics);
         return trafficRequestData;
 
+    }
+
+    @GetMapping("/api/home_page/traffic_monitoring/download")
+    @ResponseBody
+    public DownloadTrafficRequestData DownloadTraffic(@RequestParam("canteen") Integer canteen, @RequestParam("floor") Integer floor, @RequestParam("window") Integer window, @RequestParam("StartTime") String startTime, @RequestParam("EndTime") String endTime){
+        System.out.println("canteen:" + canteen + " floor:" + floor + " window:" + window + " StartTime:" + startTime + " EndTime:" + endTime);
+        DownloadTrafficRequestData downloadTrafficRequestData = new DownloadTrafficRequestData();
+        downloadTrafficRequestData.setType("home_page.traffic_monitoring.download");
+        downloadTrafficRequestData.setCode(200);
+        downloadTrafficRequestData.setMessage("success");
+        downloadTrafficRequestData.data.setCanteen(canteen);
+        downloadTrafficRequestData.data.setFloor(floor);
+        downloadTrafficRequestData.data.setWindow(window);
+        downloadTrafficRequestData.data.setTime(startTime, endTime);
+        downloadTrafficRequestData.data.setHumanTraffic(100 + (int)(Math.random() * 900));
+        return downloadTrafficRequestData;
     }
 
 }
