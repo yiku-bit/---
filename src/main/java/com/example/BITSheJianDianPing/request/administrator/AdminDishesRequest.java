@@ -152,10 +152,10 @@ public class AdminDishesRequest {
     DishDao dishDao;
     @GetMapping("/api/admin_page/get_dish_list")
     @ResponseBody
-    public StdResponse GetDishList(@RequestBody Address address){
+    public StdResponse GetDishList( @RequestParam("canteen") int canteen, @RequestParam("floor") int floor, @RequestParam("window") int window){
 //        System.out.println();
-        List<DishAttribute> dishAttributes = dishDao.getDishListByAddress(address.getCanteen(),address.getFloor(),address.getWindow());
-        System.out.println("address:"+address);
+        List<DishAttribute> dishAttributes = dishDao.getDishListByAddress(canteen,floor,window);
+        System.out.println("address:"+canteen+","+floor+","+window);
         System.out.println("got size:"+dishAttributes.size());
         LinkedList<DetailsOfDishes> detailsOfDishes = new LinkedList<DetailsOfDishes>();
         StdResponse response = new StdResponse();
