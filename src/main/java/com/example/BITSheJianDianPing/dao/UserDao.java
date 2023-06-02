@@ -12,4 +12,5 @@ public interface UserDao {
     public int updatePersonalPassword(Integer id, String password);
     public int insertUser(String stuID, String phoNum, String userName, String password, Integer status, String gender);
     public int updatePersonalData(Integer id, String phoNum, String userName, String dislike, String taste, String foodPre);
+    public User getUserByPhoNum(String phoNum);
 }
