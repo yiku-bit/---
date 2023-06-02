@@ -19,4 +19,9 @@
         INSERT INTO User (stuID, phoNum, userName, password, status, gender)
             VALUES (#{stuID}, #{phoNum}, #{userName}, #{password}, #{status}, #{gender})
     </insert>
+
+    <select id="getUserByPhoNum" resultType="com.example.BITSheJianDianPing.bean.User">
+        SELECT * FROM User WHERE
+            phoNum = #{phoNum} AND status = 0
+    </select>
 </mapper>
