@@ -445,9 +445,19 @@ public class DishesRequest {
         popularReturn.message="正常";
         popularReturn.data=new Data();
         popularReturn.data.dishes=new LinkedList<AddressAndDetails>();
+        if (last_id<0)
+        {
+            popularReturn.code=2;
+            popularReturn.message="last_id不能为负数";
+            return  popularReturn;
+        }
         List<Integer> q=commentManageDao.getPopularDishid();
-
-        // if (last_id==0) {
+        if (last_id>q.size())
+        {
+            popularReturn.code=2;
+            popularReturn.message="last_id大于等于商品数量";
+            return  popularReturn;
+        }
             for (int i = last_id; i < q.size() && i < last_id + number; i++) {
                 System.out.println("qsize" + q.size());
                 AddressAndDetails e = new AddressAndDetails();
@@ -466,37 +476,14 @@ public class DishesRequest {
                 e.setDescription(dishAttribute.getDescription());
                 e.setPhoto(dishAttribute.getPhoto());
                 popularReturn.data.dishes.addLast(e);
-
             }
-        // }
-        // Integer cnt=0;
-        // if (last_id!=0) {
-        //     for (int i=0;i<q.size();i++) {
-        //         if (q.get(i)==last_id)
-        //         {
-        //             for (int j=i+1;j<q.size();j++)
-        //             {
-        //                 cnt++;
-        //                 AddressAndDetails e = new AddressAndDetails();
-        //                 DishAttribute dishAttribute=dishDao.getDishById(q.get(i));
-        //                 e.setCanteen(dishAttribute.getCanteen());
-        //                 e.setFloor(dishAttribute.getFloor());
-        //                 e.setWindowNum(dishAttribute.getWindowNum());
+        if (last_id+number>q.size())
+        {
+            popularReturn.code=1;
+            popularReturn.message="商品不足"+number+"个，已返回"+(q.size()-last_id)+"个商品";
+            return  popularReturn;
+        }
 
-        //                 e.setId(dishAttribute.getId());
-        //                 e.setName(dishAttribute.getName());
-        //                 e.setDiscount(dishAttribute.getDiscount());
-        //                 e.setPrice(dishAttribute.getPrice());
-        //                 e.setFlavor(dishAttribute.getFlavor());
-        //                 e.setDescription(dishAttribute.getDescription());
-        //                 e.setPhoto(dishAttribute.getPhoto());
-        //                 popularReturn.data.dishes.addLast(e);
-        //                 if (cnt==number) break;
-        //             }
-        //             break;
-        //         }
-        //     }
-        // }
 
         return popularReturn;
     }
@@ -550,6 +537,16 @@ public class DishesRequest {
             e.setDescription(dishAttributeSellList.get(i).getDescription());
             e.setPhoto(dishAttributeSellList.get(i).getPhoto());
             newandsellReturn.data.sell.addFirst(e);
+        }
+
+        if (dishAttributeNewList.size()==0)
+        {
+            newandsellReturn.message= newandsellReturn.message+"，暂无新品";
+        }
+
+        if (dishAttributeSellList.size()==0)
+        {
+            newandsellReturn.message= newandsellReturn.message+"，暂无折扣商品";
         }
 
         return newandsellReturn;

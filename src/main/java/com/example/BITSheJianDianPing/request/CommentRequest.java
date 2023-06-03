@@ -227,23 +227,55 @@ public class CommentRequest {
         getComment.type="/home_page/opinion_bar";
         getComment.code=1;
         getComment.message="正常";
+        getComment.data=new GetComment.Data();
+        getComment.data.rating=new RatingOfDishes();
+        getComment.data.comments=new LinkedList<GComment>();
+        getComment.data.rating.setTaste(0.0);
+        getComment.data.rating.setEnvironment(0.0);
+        getComment.data.rating.setServe(0.0);
+
+        DishAttribute dish;
+        dish=dishDao.getDishById(dishid);
+        if (dish==null)
+        {
+            getComment.code=2;
+            getComment.message="商品查询失败,该商品id不存在";
+            return getComment;
+        }
+        if (!dish.getName().contentEquals(dishname))
+        {
+            getComment.code=2;
+            getComment.message="商品id和商品名不一致";
+            return getComment;
+        }
+        if(dishDao.getWindowById(dish.getId())!=window||dish.getFloor()!=floor||dish.getCanteen()!=canteen)
+        {
+            getComment.code=2;
+            getComment.message="商品id和商品地址不匹配";
+            return getComment;
+        }
 
         List<CommentAttribute> commentAttributeList;
         // commentAttributeList = commentManageDao.getCommentListByAddressAndName(canteen,floor,window,dishname);
         commentAttributeList = commentManageDao.getCommentListByAddressAndId(canteen,floor,window,dishid);
         Double totTaste=0.0,totEnvironment=0.0,totServe=0.0;
+        if (commentAttributeList.size()==0)
+        {
+            getComment.code=1;
+            getComment.message="该商品暂无评价";
+            return getComment;
+        }
         for (int i=0;i<commentAttributeList.size();i++)
         {
             totTaste=totTaste+commentAttributeList.get(i).getTaste();
             totEnvironment=totEnvironment+commentAttributeList.get(i).getEnvironment();
             totServe=totServe+commentAttributeList.get(i).getServe();
         }
-        getComment.data=new GetComment.Data();
-        getComment.data.rating=new RatingOfDishes();
+
         getComment.data.rating.setTaste(totTaste/commentAttributeList.size());
         getComment.data.rating.setEnvironment(totEnvironment/commentAttributeList.size());
         getComment.data.rating.setServe(totServe/commentAttributeList.size());
-        getComment.data.comments=new LinkedList<GComment>();
+
         for (int i=0;i<commentAttributeList.size();i++)
         {
             GComment e= new GComment();
@@ -272,32 +304,77 @@ public class CommentRequest {
     public JSONObject writeComment(@RequestBody WriteComment comment)
     {
         System.out.println();
+        JSONObject jsonObject = new JSONObject();
         int code = 0;
-        String message = "success";
+        String message = "成功";
         String type = "home_page/write_comment";
+
         DishAttribute dishAttribute ;/*= new DishAttribute();*/
         dishAttribute = dishDao.getDishByAddressAndName(comment.getAddress().getCanteen(),comment.getAddress().getFloor(),comment.getAddress().getWindow(),comment.getComment().getDishname());
+        if (dishAttribute==null)
+        {
+            message = "商品查询失败，该商品地址下没有这个商品";
+            jsonObject.put("code", code);
+            jsonObject.put("message", message);
+            jsonObject.put("type", type);
+            jsonObject.put("data", "NULL");
+            return jsonObject;
+        }
+        DishAttribute dish;
+        dish=dishDao.getDishById(comment.getComment().getDishid());
+        if (dish==null)
+        {
+            message = "商品查询失败，不存在商品id为"+comment.getComment().getDishid()+"的商品";
+            jsonObject.put("code", code);
+            jsonObject.put("message", message);
+            jsonObject.put("type", type);
+            jsonObject.put("data", "NULL");
+            return jsonObject;
+        }
+        if (dish.getCanteen()!=comment.getAddress().getCanteen()||dish.getFloor()!=comment.getAddress().getFloor()||dishDao.getWindowById(dish.getId())!=comment.getAddress().getWindow()||(!dish.getName().contentEquals(comment.getComment().getDishname())))
+        {
+            message = "商品查询失败，商品id有误，与商品地址、商品名不一致";
+            //message = message+dish.getName()+" "+comment.getComment().getDishname();
+            if (dish.getCanteen()!=comment.getAddress().getCanteen()) message=message+"canteen";
+            if (dish.getFloor()!=comment.getAddress().getFloor()) message=message+"floor";
+            if (dishDao.getWindowById(dish.getId())!=comment.getAddress().getWindow()) message=message+"windwo";
+            if (dish.getName()!=comment.getComment().getDishname()) message=message+"name";
+            jsonObject.put("code", code);
+            jsonObject.put("message", message);
+            jsonObject.put("type", type);
+            jsonObject.put("data", "NULL");
+            return jsonObject;
+        }
+
+        if(comment.getComment().getComment()==null)
+        {
+            comment.getComment().setComment("无");
+            message = message+"，但评论为空";
+        }
         if(comment.getRating().getTaste() == null)
         {
             comment.getRating().setTaste(5.0);
+            message = message+"，但无口味打分、默认五分";
         }
         if(comment.getRating().getEnvironment() == null)
         {
             comment.getRating().setEnvironment(5.0);
+            message = message+"，但无环境打分、默认五分";
         }
         if(comment.getRating().getServe() == null)
         {
             comment.getRating().setServe(5.0);
+            message = message+"，但无服务打分、默认五分";
         }
         int i= commentManageDao.insertComment(comment.getComment().getDishid(),comment.getComment().getDishname(),comment.getComment().getId(),comment.getComment().getName(),comment.getComment().getComment(),comment.getComment().getPhoto(),comment.getComment().getDatetime(),comment.getAddress().getCanteen(),comment.getAddress().getFloor(),comment.getAddress().getWindow(),0,0,dishAttribute.getDiscount(),dishAttribute.getPrice(),dishAttribute.getDescription(),comment.getRating().getTaste(),comment.getRating().getEnvironment(),comment.getRating().getServe());
         if(i>0){
 
         }else {
             code = 2;
-            message = "failed";
+            message = "评论失败";
         }
 
-        JSONObject jsonObject = new JSONObject();
+
         jsonObject.put("code", code);
         jsonObject.put("message", message);
         jsonObject.put("type", type);
@@ -319,7 +396,7 @@ public class CommentRequest {
 
         }else {
             code = 2;
-            message = "failed";
+            message = "失败，不存在该评论号";
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", code);
@@ -343,7 +420,7 @@ public class CommentRequest {
 
         }else {
             code = 2;
-            message = "failed";
+            message = "失败，不存在该评论号";
         }
 
         JSONObject jsonObject = new JSONObject();
