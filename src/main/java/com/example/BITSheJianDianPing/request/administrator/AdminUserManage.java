@@ -21,9 +21,9 @@ public class AdminUserManage {
     CommentManageDao commentManageDao;
     @ResponseBody
     @GetMapping("/api/admin_page/get_comment")
-    public StdResponse GetComment(@RequestBody Address address){
-        List<CommentAttribute> commentAttributes = commentManageDao.getCommentListByAddress(address.getCanteen(),address.getFloor(),address.getWindow());
-        System.out.println("address:"+address);
+    public StdResponse GetComment(@RequestParam("canteen") int canteen, @RequestParam("floor")int floor, @RequestParam("window") int window){
+        List<CommentAttribute> commentAttributes = commentManageDao.getCommentListByAddress(canteen,floor,window);
+        System.out.println("address: "+canteen+","+floor+","+window);
         System.out.println("got size:"+commentAttributes.size());
         LinkedList<Comment> comments = new LinkedList<>();
         StdResponse response = new StdResponse();
