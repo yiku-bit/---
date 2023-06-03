@@ -13,7 +13,7 @@ public class CommentAttribute {
     private String datetime;
     private int canteen;
     private int floor;
-    private int window;
+    private int windowNum;
 
     private Integer goodnumber;
 
@@ -107,12 +107,12 @@ public class CommentAttribute {
         this.floor = floor;
     }
 
-    public int getWindow() {
-        return window;
+    public int getWindowNum() {
+        return windowNum;
     }
 
-    public void setWindow(int window) {
-        this.window = window;
+    public void setWindowNum(int windowNum) {
+        this.windowNum = windowNum;
     }
 
     public Integer getGoodnumber() {

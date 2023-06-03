@@ -25,21 +25,33 @@ public class AdminUserManage {
         List<CommentAttribute> commentAttributes = commentManageDao.getCommentListByAddress(canteen,floor,window);
         System.out.println("address: "+canteen+","+floor+","+window);
         System.out.println("got size:"+commentAttributes.size());
-        LinkedList<Comment> comments = new LinkedList<>();
         StdResponse response = new StdResponse();
         HashMap<String, Object> data = new HashMap<>();
         response.setCode(200);
-        for(CommentAttribute c:commentAttributes){
-            comments.add(new Comment(
-                    c.getDishid(),
-                    c.getDishname(),
-                    c.getId(),
-                    c.getName(),
-                    c.getComment(),
-                    c.getPhoto(),
-                    c.getDatetime()
-            ));
-        }
+        //            comments.add(new CommentAttribute(
+        //                    c.getCommentid(),
+        //                    c.getDishid(),
+        //                    c.getDishname(),
+        //                    c.getId(),
+        //                    c.getName(),
+        //                    c.getComment(),
+        //                    c.getPhoto(),
+        //                    c.getDatetime(),
+        //                    c.getCanteen(),
+        //                    c.getFloor(),
+        //                    c.getWindowNum(),
+        //                    c.getGoodnumber(),
+        //                    c.getBadnumber(),
+        //                    c.getDiscount(),
+        //                    c.getPrice(),
+        //                    c.getDescription(),
+        //                    c.getTaste(),
+        //                    c.getEnvironment(),
+        //                    c.getServe()
+        //                    )
+        //            );
+
+        LinkedList<CommentAttribute> comments = new LinkedList<>(commentAttributes);
         data.put("list", comments);
         response.setData(data);
         response.setMessage("success");

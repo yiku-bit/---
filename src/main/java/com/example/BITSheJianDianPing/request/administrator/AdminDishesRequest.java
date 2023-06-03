@@ -193,7 +193,7 @@ public class AdminDishesRequest {
             response.setCode(200);
             response.setMessage("success");
         }catch (Exception e){
-//            e.printStackTrace();
+            e.printStackTrace();
             response.setCode(500);
             response.setMessage("failed");
         }

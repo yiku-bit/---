@@ -416,7 +416,7 @@ public class DishesRequest {
                 DishAttribute dishAttribute=dishDao.getDishById(selectedItem);
                 e.setCanteen(dishAttribute.getCanteen());
                 e.setFloor(dishAttribute.getFloor());
-                // e.setWindow(dishAttribute.getWindow());
+                // e.setWindowNum(dishAttribute.getWindowNum());
 
                 e.setId(dishAttribute.getId());
                 e.setWindow(dishDao.getWindowById(e.getId()));
@@ -481,7 +481,7 @@ public class DishesRequest {
         //                 DishAttribute dishAttribute=dishDao.getDishById(q.get(i));
         //                 e.setCanteen(dishAttribute.getCanteen());
         //                 e.setFloor(dishAttribute.getFloor());
-        //                 e.setWindow(dishAttribute.getWindow());
+        //                 e.setWindowNum(dishAttribute.getWindowNum());
 
         //                 e.setId(dishAttribute.getId());
         //                 e.setName(dishAttribute.getName());
