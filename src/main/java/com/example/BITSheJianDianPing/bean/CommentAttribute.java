@@ -178,4 +178,28 @@ public class CommentAttribute {
     public void setServe(Double serve) {
         this.serve = serve;
     }
+
+    public String toString() {
+        return "CommentAttribute{" +
+                "commentid=" + commentid +
+                ", dishid=" + dishid +
+                ", dishname='" + dishname + '\'' +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", comment='" + comment + '\'' +
+                ", photo='" + photo + '\'' +
+                ", datetime='" + datetime + '\'' +
+                ", canteen=" + canteen +
+                ", floor=" + floor +
+                ", windowNum=" + windowNum +
+                ", goodnumber=" + goodnumber +
+                ", badnumber=" + badnumber +
+                ", discount=" + discount +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", taste=" + taste +
+                ", environment=" + environment +
+                ", serve=" + serve +
+                '}';
+    }
 }

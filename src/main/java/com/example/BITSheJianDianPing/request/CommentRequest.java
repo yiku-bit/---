@@ -277,7 +277,18 @@ public class CommentRequest {
         String type = "home_page/write_comment";
         DishAttribute dishAttribute ;/*= new DishAttribute();*/
         dishAttribute = dishDao.getDishByAddressAndName(comment.getAddress().getCanteen(),comment.getAddress().getFloor(),comment.getAddress().getWindow(),comment.getComment().getDishname());
-
+        if(comment.getRating().getTaste() == null)
+        {
+            comment.getRating().setTaste(5.0);
+        }
+        if(comment.getRating().getEnvironment() == null)
+        {
+            comment.getRating().setEnvironment(5.0);
+        }
+        if(comment.getRating().getServe() == null)
+        {
+            comment.getRating().setServe(5.0);
+        }
         int i= commentManageDao.insertComment(comment.getComment().getDishid(),comment.getComment().getDishname(),comment.getComment().getId(),comment.getComment().getName(),comment.getComment().getComment(),comment.getComment().getPhoto(),comment.getComment().getDatetime(),comment.getAddress().getCanteen(),comment.getAddress().getFloor(),comment.getAddress().getWindow(),0,0,dishAttribute.getDiscount(),dishAttribute.getPrice(),dishAttribute.getDescription(),comment.getRating().getTaste(),comment.getRating().getEnvironment(),comment.getRating().getServe());
         if(i>0){
 
