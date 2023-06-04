@@ -186,7 +186,7 @@ public class CommentAttribute {
                 ", dishname='" + dishname + '\'' +
                 ", id=" + id +
                 ", name='" + name + '\'' +
-                ", comment='" + comment + '\'' +
+                ", comment='" + content + '\'' +
                 ", photo='" + photo + '\'' +
                 ", datetime='" + datetime + '\'' +
                 ", canteen=" + canteen +

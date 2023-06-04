@@ -5,7 +5,7 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/webapp
     username: root
-    password: yaojiaxin2002 # 采用部署到本地的时候自己的密码
+    password: zhangcheng2020 # 采用部署到本地的时候自己的密码
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
