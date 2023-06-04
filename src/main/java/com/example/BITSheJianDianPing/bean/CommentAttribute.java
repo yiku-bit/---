@@ -8,7 +8,7 @@ public class CommentAttribute {
     private String dishname;
     private Integer id;
     private String name;
-    private String comment;
+    private String content;
     private String photo;
     private String datetime;
     private int canteen;
@@ -67,12 +67,12 @@ public class CommentAttribute {
         this.name = name;
     }
 
-    public String getComment() {
-        return comment;
+    public String getContent() {
+        return content;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getPhoto() {

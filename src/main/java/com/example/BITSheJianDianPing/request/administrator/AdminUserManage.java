@@ -34,7 +34,7 @@ public class AdminUserManage {
         //                    c.getDishname(),
         //                    c.getId(),
         //                    c.getName(),
-        //                    c.getComment(),
+        //                    c.getContent(),
         //                    c.getPhoto(),
         //                    c.getDatetime(),
         //                    c.getCanteen(),
