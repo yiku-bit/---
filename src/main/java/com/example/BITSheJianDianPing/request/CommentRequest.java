@@ -272,9 +272,17 @@ public class CommentRequest {
             totServe=totServe+commentAttributeList.get(i).getServe();
         }
 
-        getComment.data.rating.setTaste(totTaste/commentAttributeList.size());
-        getComment.data.rating.setEnvironment(totEnvironment/commentAttributeList.size());
-        getComment.data.rating.setServe(totServe/commentAttributeList.size());
+        totTaste=totTaste/commentAttributeList.size();
+        totEnvironment=totEnvironment/commentAttributeList.size();
+        totServe=totServe/commentAttributeList.size();
+
+        totTaste = (double) Math.round(totTaste * 100) / 100;
+        totEnvironment = (double) Math.round(totEnvironment * 100) / 100;
+        totServe = (double) Math.round(totServe * 100) / 100;
+
+        getComment.data.rating.setTaste(totTaste);
+        getComment.data.rating.setEnvironment(totEnvironment);
+        getComment.data.rating.setServe(totServe);
 
         for (int i=0;i<commentAttributeList.size();i++)
         {
@@ -335,10 +343,10 @@ public class CommentRequest {
         {
             message = "商品查询失败，商品id有误，与商品地址、商品名不一致";
             //message = message+dish.getName()+" "+comment.getComment().getDishname();
-            if (dish.getCanteen()!=comment.getAddress().getCanteen()) message=message+"canteen";
-            if (dish.getFloor()!=comment.getAddress().getFloor()) message=message+"floor";
-            if (dishDao.getWindowById(dish.getId())!=comment.getAddress().getWindow()) message=message+"windwo";
-            if (dish.getName()!=comment.getComment().getDishname()) message=message+"name";
+            // if (dish.getCanteen()!=comment.getAddress().getCanteen()) message=message+"canteen";
+            // if (dish.getFloor()!=comment.getAddress().getFloor()) message=message+"floor";
+            // if (dishDao.getWindowById(dish.getId())!=comment.getAddress().getWindow()) message=message+"windwo";
+            // if (dish.getName()!=comment.getComment().getDishname()) message=message+"name";
             jsonObject.put("code", code);
             jsonObject.put("message", message);
             jsonObject.put("type", type);
@@ -365,6 +373,15 @@ public class CommentRequest {
         {
             comment.getRating().setServe(5.0);
             message = message+"，但无服务打分、默认五分";
+        }
+        if (comment.getRating().getEnvironment()<0||comment.getRating().getEnvironment()>5||comment.getRating().getServe()<0||comment.getRating().getServe()>5||comment.getRating().getTaste()>5||comment.getRating().getTaste()<0)
+        {
+            message="评分不在合法范围";
+            jsonObject.put("code", code);
+            jsonObject.put("message", message);
+            jsonObject.put("type", type);
+            jsonObject.put("data", "NULL");
+            return jsonObject;
         }
         int i= commentManageDao.insertComment(comment.getComment().getDishid(),comment.getComment().getDishname(),comment.getComment().getId(),comment.getComment().getName(),comment.getComment().getComment(),comment.getComment().getPhoto(),comment.getComment().getDatetime(),comment.getAddress().getCanteen(),comment.getAddress().getFloor(),comment.getAddress().getWindow(),0,0,dishAttribute.getDiscount(),dishAttribute.getPrice(),dishAttribute.getDescription(),comment.getRating().getTaste(),comment.getRating().getEnvironment(),comment.getRating().getServe());
         if(i>0){
@@ -397,6 +414,7 @@ public class CommentRequest {
         }else {
             code = 2;
             message = "失败，不存在该评论号";
+            if (commentid.getCommentid()<0) message = "失败，评论编号不能为负数";
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", code);
@@ -421,6 +439,7 @@ public class CommentRequest {
         }else {
             code = 2;
             message = "失败，不存在该评论号";
+            if (commentid.getCommentid()<0) message = "失败，评论编号不能为负数";
         }
 
         JSONObject jsonObject = new JSONObject();

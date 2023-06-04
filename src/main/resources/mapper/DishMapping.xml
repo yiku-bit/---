@@ -62,4 +62,12 @@
     <select id="getWindowById" resultType="Integer">
         SELECT windowNum FROM Dish WHERE id=#{id}
     </select>
+
+    <select id="getAddressCountByFloor" resultType="Integer">
+        SELECT count(*) FROM Address WHERE canteen=#{canteen} and floor=#{floor}
+    </select>
+
+    <select id="getAddressCountByWindow" resultType="Integer">
+        SELECT count(*) FROM Address WHERE canteen=#{canteen} and floor=#{floor} and windowNum=#{window}
+    </select>
 </mapper>

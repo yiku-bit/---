@@ -3,10 +3,12 @@ package com.example.BITSheJianDianPing.request;
 import java.util.LinkedList;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.example.BITSheJianDianPing.dao.DishDao;
 
 class humanTraffic{
     private Integer window;
@@ -192,12 +194,20 @@ class DownloadTrafficRequestData{
 
 @Controller
 public class TrafficRequest {
+    @Autowired
+    private DishDao dishDao;
     @GetMapping("/api/home_page/traffic_monitoring")
     @ResponseBody
     public TrafficRequestData Traffic(@RequestParam("canteen") Integer canteen, @RequestParam("floor") Integer floor){
         System.out.println("canteen:" + canteen + " floor:" + floor);
         TrafficRequestData trafficRequestData = new TrafficRequestData();
         trafficRequestData.setType("home_page.traffic_monitoring");
+        if(dishDao.getAddressCountByFloor(canteen, floor) == 0){
+            trafficRequestData.setCode(0);
+            trafficRequestData.setMessage("Requested address does not exist.");
+            System.out.println("traffic_monitoring : address is null");
+            return trafficRequestData;
+        }
         trafficRequestData.setCode(200);
         trafficRequestData.setMessage("success");
         LinkedList<humanTraffic>humanTraffics = new LinkedList<humanTraffic>();
@@ -218,12 +228,18 @@ public class TrafficRequest {
         System.out.println("canteen:" + canteen + " floor:" + floor + " window:" + window + " StartTime:" + startTime + " EndTime:" + endTime);
         DownloadTrafficRequestData downloadTrafficRequestData = new DownloadTrafficRequestData();
         downloadTrafficRequestData.setType("home_page.traffic_monitoring.download");
-        downloadTrafficRequestData.setCode(200);
-        downloadTrafficRequestData.setMessage("success");
         downloadTrafficRequestData.data.setCanteen(canteen);
         downloadTrafficRequestData.data.setFloor(floor);
         downloadTrafficRequestData.data.setWindow(window);
         downloadTrafficRequestData.data.setTime(startTime, endTime);
+        if(dishDao.getAddressCountByWindow(canteen, floor, window) == 0){
+            downloadTrafficRequestData.setCode(1);
+            downloadTrafficRequestData.setMessage("Requested address does not exist.");
+            System.out.println("traffic_download : address is null");
+            return downloadTrafficRequestData;
+        }
+        downloadTrafficRequestData.setCode(200);
+        downloadTrafficRequestData.setMessage("success");
         downloadTrafficRequestData.data.setHumanTraffic(100 + (int)(Math.random() * 900));
         return downloadTrafficRequestData;
     }

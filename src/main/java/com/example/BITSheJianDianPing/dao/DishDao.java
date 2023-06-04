@@ -28,6 +28,8 @@ public interface DishDao {
     int DeleteDish(Integer id);
     Integer AskLastIdentity();
 
+    Integer getAddressCountByFloor(Integer canteen, Integer floor);
 
+    Integer getAddressCountByWindow(Integer canteen, Integer floor, Integer window);
 
 }

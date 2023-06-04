@@ -372,11 +372,16 @@ public class DishesRequest {
         recommendReturn.data.dishes= new LinkedList<AddressAndDetails>();
         
         List<RecommendDishAttribute> recommendDishAttributes = dishDao.getRecommendDishList(id, date);
-
+        if(recommendDishAttributes.size() == 0)
+        {
+            recommendReturn.code=0;
+            recommendReturn.message="User does not exist";
+            return recommendReturn;
+        }
         if(recommendDishAttributes.size() < number)
         {
-            recommendReturn.code=-1; //TODO
-            recommendReturn.message="请求菜品数量过多";
+            recommendReturn.code=1;
+            recommendReturn.message="Too many dishes requested.";
             number = recommendDishAttributes.size();
         }
 
@@ -387,27 +392,35 @@ public class DishesRequest {
 
         // }
         // 根据recScore，加权随机选取number个dishId
-        double sum = 0;
-        for(RecommendDishAttribute recommendDishAttribute:recommendDishAttributes) {
-            sum += recommendDishAttribute.getRecScore();
-        }
-        double[] weight = new double[recommendDishAttributes.size()];
-        for(int i = 0; i < recommendDishAttributes.size(); i++) {
-            weight[i] = recommendDishAttributes.get(i).getRecScore() / sum;
-        }
         Set<Integer> selectedItems = new HashSet<>();
-        Random random = new Random();
-        while(selectedItems.size() < number) {
-            double randomNum = random.nextDouble();
-            double sumWeight = 0;
-            for(int j = 0; j < recommendDishAttributes.size(); j++) {
-                sumWeight += weight[j];
-                if(randomNum <= sumWeight) {
-                    selectedItems.add(recommendDishAttributes.get(j).getDishID());
-                    break;
+        if(number == recommendDishAttributes.size()){
+            for(RecommendDishAttribute recommendDishAttribute:recommendDishAttributes) {
+                selectedItems.add(recommendDishAttribute.getDishID());
+            }
+        }
+        else{
+            double sum = 0;
+            for(RecommendDishAttribute recommendDishAttribute:recommendDishAttributes) {
+                sum += recommendDishAttribute.getRecScore();
+            }
+            double[] weight = new double[recommendDishAttributes.size()];
+            for(int i = 0; i < recommendDishAttributes.size(); i++) {
+                weight[i] = recommendDishAttributes.get(i).getRecScore() / sum;
+            }
+            Random random = new Random();
+            while(selectedItems.size() < number) {
+                double randomNum = random.nextDouble();
+                double sumWeight = 0;
+                for(int j = 0; j < recommendDishAttributes.size(); j++) {
+                    sumWeight += weight[j];
+                    if(randomNum <= sumWeight) {
+                        selectedItems.add(recommendDishAttributes.get(j).getDishID());
+                        break;
+                    }
                 }
             }
         }
+        
 
         System.out.println("随机推荐的" + number + "个dishid是：");
         for(Integer selectedItem : selectedItems) {
@@ -449,6 +462,12 @@ public class DishesRequest {
         {
             popularReturn.code=2;
             popularReturn.message="last_id不能为负数";
+            return  popularReturn;
+        }
+        if (number<0)
+        {
+            popularReturn.code=2;
+            popularReturn.message="请求商品数量不能为负数";
             return  popularReturn;
         }
         List<Integer> q=commentManageDao.getPopularDishid();
@@ -566,6 +585,12 @@ public class DishesRequest {
 
         List<DishAttribute> dishAttributeList;
         dishAttributeList=dishDao.getDishListByAddress(canteen,floor,window);
+
+        if (dishAttributeList.size()==0)
+        {
+            dishlistReturn.message="当前窗口暂无菜品";
+            return dishlistReturn;
+        }
 
         for (int i=0;i<dishAttributeList.size();i++)
         {
