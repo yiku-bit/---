@@ -292,7 +292,7 @@ public class CommentRequest {
             e.setId(commentAttributeList.get(i).getId());
             e.setName(commentAttributeList.get(i).getName());
             e.setDishname(commentAttributeList.get(i).getDishname());
-            e.setComment(commentAttributeList.get(i).getComment());
+            e.setComment(commentAttributeList.get(i).getContent());
             e.setComment(commentManageDao.getContent(e.getCommentid()));
             e.setPhoto(commentAttributeList.get(i).getPhoto());
             e.setDatetime(commentAttributeList.get(i).getDatetime());
